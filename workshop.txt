@@ -1,9 +1,9 @@
 version=1
-id=3232884829
+id=3300688173
 title=Check Upstairs
-description=[h1]What does this do[/h1]
-description=Automatically puts you in god mode upon launching a save, making your character immortal and save them from incoming danger. Just make sure to remove the mod after being saved or you'll stay in god mode for the entire time.
+description=[url=https://ko-fi.com/sirdoggyjvla][img]https://raw.githubusercontent.com/ChuckTheSheep/chuckImages/main/kofi.png[/img][/url][url=https://discord.gg/SReMnbV4V7][img]https://raw.githubusercontent.com/Chuckleberry-Finn/chuckImages/main/PZmodCommBanner1.png[/img][/url]
 description=
-description=[img]https://raw.githubusercontent.com/SirDoggyJvla/Deify-Me-Baby/main/images/dagoth.gif[/img]
-tags=Build 41;Balance;Silly/Fun
+description=[url=https://discord.gg/VteSYrd4mW][img]https://raw.githubusercontent.com/SirDoggyJvla/Project-Overgrown/main/images/banners/server_banner.png[/img][/url]
+description=[url=https://trello.com/b/OmzeKvdv/the-last-of-us-infected][img]https://raw.githubusercontent.com/SirDoggyJvla/The-Last-of-Us-Infected/main/images/mod_advancement.png[/img][/url]
+tags=Build 41;Balance;Interface;Misc;Realistic
 visibility=public
