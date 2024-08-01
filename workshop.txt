@@ -19,6 +19,7 @@ description=[h1]Customize your experience:[/h1]
 description=[list]
 description=[*] Change your [b]keybind[/b] thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] !
 description=[*] Adapt your sandbox options to your liking ! You can increase the radius which the character checks for zombies at the top of the stairs. You can chose to show the zombie position or not.
+description=[*] Chose the lore name of the your zombies ! This can also be done with a mod (check the next part about modder's documentation).
 description=[*] Native compatibility with [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044]Zomboid Forge[/url] ! This will show the name of the zombie type instead simply "zombie" and take into consideration the nametag options of the user (font, duration...).
 description=[/list]
 description=[/quote]
