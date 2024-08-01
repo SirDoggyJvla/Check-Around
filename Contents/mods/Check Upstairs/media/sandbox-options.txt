@@ -1,0 +1,22 @@
+VERSION = 1,
+
+/*---------------------------------------------------------------------
+-- Base sandbox options
+---------------------------------------------------------------------*/
+option CheckUpstairs.Radius
+{
+	type = integer, 
+	min = 1, 
+	max = 6, 
+	default = 3,
+	page = CheckUpstairs,
+	translation = CheckUpstairs_Radius,
+}
+
+option CheckUpstairs.ShowZombie
+{
+	type = boolean,
+	default = true,
+	page = CheckUpstairs,
+	translation = CheckUpstairs_ShowZombie,
+}

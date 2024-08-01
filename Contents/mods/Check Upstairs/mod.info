@@ -1,0 +1,10 @@
+id=CheckUpstairs
+name=Check Upstairs
+description=Check Upstairs allows you to check for zombies at the top of the stairs you are climbing. Original concept by Braven with his Stairs Alert mod.
+poster=poster.png
+authors=SirDoggyJvla
+icon=icon.png
+tags=Build 41,CheckUpstairs,Stairs,Check
+url=https://ko-fi.com/sirdoggyjvla
+versionMin=41.0
+require=modoptions

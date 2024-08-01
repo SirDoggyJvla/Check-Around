@@ -1,0 +1,11 @@
+Sandbox_EN = {
+	/* Page names */
+	Sandbox_CheckUpstairs = "Check Upstairs",
+
+	/* CheckUpstairs */
+	Sandbox_CheckUpstairs_Radius = "Radius from top of stairs",
+	Sandbox_CheckUpstairs_Radius_tooltip = "Defines the radius in which the zombie needs to be around the square at the top of the stairs to be detected by the player.",
+
+	Sandbox_CheckUpstairs_ShowZombie = "Show zombies position",
+	Sandbox_CheckUpstairs_ShowZombie_tooltip = "This will show the zombie position by showing its name above.",
+}
