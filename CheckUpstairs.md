@@ -17,8 +17,8 @@ This can be done this way in your code:
 if getActivatedMods():contains("CheckUpstairs") then
     local CheckUpstairs = require "CheckUpstairs"
 
-	CheckUpstairs.ZombieName = getText("IGUI_TLOU_zombieName")
-	CheckUpstairs.ZombiesName = getText("IGUI_TLOU_zombiesName")
+	CheckUpstairs.defaultZombieName = getText("IGUI_TLOU_zombieName")
+	CheckUpstairs.defaultZombiesName = getText("IGUI_TLOU_zombiesName")
 end
 ```
 ```java
@@ -35,12 +35,12 @@ You can also not bother with translation files and directly have:
 if getActivatedMods():contains("CheckUpstairs") then
     local CheckUpstairs = require "CheckUpstairs"
 
-	CheckUpstairs.ZombieName = "infected"
-	CheckUpstairs.ZombiesName = "infected"
+	CheckUpstairs.defaultZombieName = "infected"
+	CheckUpstairs.defaultZombiesName = "infected"
 end
 ```
 
-`CheckUpstairs.ZombieName` is the singular word, while `CheckUpstairs.ZombiesName` is the plurial of the lore zombie name. In the previous example, `"infected"` is used for both as `"infected"` is used for both singular and plurial.
+`CheckUpstairs.defaultZombieName` is the singular word, while `CheckUpstairs.defaultZombiesName` is the plurial of the lore zombie name. In the previous example, `"infected"` is used for both as `"infected"` is used for both singular and plurial.
 
 As another example utilizing the lore name to correspond to a The Walking Dead setting:
 ```lua
@@ -48,8 +48,8 @@ As another example utilizing the lore name to correspond to a The Walking Dead s
 if getActivatedMods():contains("CheckUpstairs") then
     local CheckUpstairs = require "CheckUpstairs"
 
-	CheckUpstairs.ZombieName = "walker"
-	CheckUpstairs.ZombiesName = "walkers"
+	CheckUpstairs.defaultZombieName = "walker"
+	CheckUpstairs.defaultZombiesName = "walkers"
 end
 ```
 

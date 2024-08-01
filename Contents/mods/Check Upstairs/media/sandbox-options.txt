@@ -13,10 +13,26 @@ option CheckUpstairs.Radius
 	translation = CheckUpstairs_Radius,
 }
 
-option CheckUpstairs.ShowZombie
+option CheckUpstairs.ShowZombieNametag
 {
 	type = boolean,
 	default = true,
 	page = CheckUpstairs,
-	translation = CheckUpstairs_ShowZombie,
+	translation = CheckUpstairs_ShowZombieNametag,
+}
+
+option CheckUpstairs.loreNameSingular
+{
+    type = string,
+    default = ,
+    page = CheckUpstairs,
+    translation = CheckUpstairs_loreNameSingular,
+}
+
+option CheckUpstairs.loreNamePlurial
+{
+    type = string,
+    default = ,
+    page = CheckUpstairs,
+    translation = CheckUpstairs_loreNamePlurial,
 }

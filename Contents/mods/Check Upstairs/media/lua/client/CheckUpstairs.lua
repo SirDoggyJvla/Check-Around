@@ -75,8 +75,18 @@ CheckUpstairs.getZombiesUpstairs = function(player,topCoordinates)
     return zombies
 end
 
-CheckUpstairs.ZombieName = getText("IGUI_CheckUpstairs_zombieName")
-CheckUpstairs.ZombiesName = getText("IGUI_CheckUpstairs_zombiesName")
+-- set zombie lore name
+CheckUpstairs.defaultZombieName = getText("IGUI_CheckUpstairs_zombieName")
+CheckUpstairs.defaultZombiesName = getText("IGUI_CheckUpstairs_zombieName")
+CheckUpstairs.ZombieName = SandboxVars.CheckUpstairs.loreNameSingular or CheckUpstairs.defaultZombieName
+CheckUpstairs.ZombiesName = SandboxVars.CheckUpstairs.loreNamePlurial or CheckUpstairs.defaultZombiesName
+
+CheckUpstairs.UpdateZombieName = function()
+    CheckUpstairs.ZombieName = SandboxVars.CheckUpstairs.loreNameSingular ~= "" and SandboxVars.CheckUpstairs.loreNameSingular or CheckUpstairs.defaultZombieName
+    CheckUpstairs.ZombiesName = SandboxVars.CheckUpstairs.loreNamePlurial ~= "" and SandboxVars.CheckUpstairs.loreNamePlurial or CheckUpstairs.defaultZombiesName
+end
+
+Events.OnGameStart.Add(CheckUpstairs.UpdateZombieName)
 
 CheckUpstairs.Voicelines_noZombies = {
     getText("IGUI_CheckUpstairs_noZombies1"),
@@ -125,7 +135,7 @@ CheckUpstairs.checkUpstairs = function()
             player:Say(string.format(voiceLine,zombiesAmount,CheckUpstairs.ZombiesName))
         end
 
-        if SandboxVars.CheckUpstairs.ShowZombie then
+        if SandboxVars.CheckUpstairs.ShowZombieNametag then
             for _,zombie in ipairs(zombies) do
                 CheckUpstairs.ShowNametag(zombie)
             end
@@ -136,6 +146,12 @@ CheckUpstairs.checkUpstairs = function()
     end
 end
 
+CheckUpstairs.ShowNametag = function(zombie)
+    local zombieModData = zombie:getModData()
+    zombieModData.CheckUpstairs_ticks = 200
+    zombieModData.CheckUpstairs_nametag = TextDrawObject.new()
+    zombieModData.CheckUpstairs_nametag:ReadString(UIFont.Small, CheckUpstairs.ZombieName, -1)
+end
 
 -- Draws the nametag of the `zombie` based on the `ticks` value.
 ---@param zombie IsoZombie
@@ -143,13 +159,13 @@ end
 CheckUpstairs.DrawNameTag = function(zombie,ticks)
     local zombieModData = zombie:getModData()
 
-    -- initialize nametag
-    if not zombieModData.CheckUpstairs_nametag then
-        zombieModData.CheckUpstairs_nametag = TextDrawObject.new()
-    end
-
     -- get zombie nametag
     local nametag = zombieModData.CheckUpstairs_nametag
+
+    -- skip if no nametag
+    if not nametag then
+        return
+    end
 
     -- get initial position of zombie
     local sx = IsoUtils.XToScreen(zombie:getX(), zombie:getY(), zombie:getZ(), 0)
@@ -169,7 +185,7 @@ CheckUpstairs.DrawNameTag = function(zombie,ticks)
     sy = sy - nametag:getHeight()
 
     -- apply string with font
-    nametag:ReadString(UIFont.Small, CheckUpstairs.ZombieName, -1)
+    -- nametag:ReadString(UIFont.Small, CheckUpstairs.ZombieName, -1)
 
     -- apply visuals
     nametag:setDefaultColors(1,1,1,ticks/100)
@@ -179,12 +195,7 @@ CheckUpstairs.DrawNameTag = function(zombie,ticks)
     nametag:AddBatchedDraw(sx, sy, true)
 end
 
-CheckUpstairs.ShowNametag = function(zombie)
-    local zombieModData = zombie:getModData()
-    zombieModData.CheckUpstairs_ticks = 200
-end
-
-CheckUpstairs.HandleNametag = function(zombie)
+CheckUpstairs.HandleVisuals = function(zombie)
     local zombieModData = zombie:getModData()
 
     -- skip if shouldn't show nametag
@@ -203,7 +214,7 @@ CheckUpstairs.HandleNametag = function(zombie)
     end
 end
 
-Events.OnZombieUpdate.Add(CheckUpstairs.HandleNametag)
+Events.OnZombieUpdate.Add(CheckUpstairs.HandleVisuals)
 
 
 --- Add the keybinds 

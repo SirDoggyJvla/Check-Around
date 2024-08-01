@@ -1,0 +1,18 @@
+Sandbox_FR = {
+	/* by Rodriguo */
+	/* Page names */
+	Sandbox_CheckUpstairs = "Check Upstairs",
+
+	/* CheckUpstairs */
+	Sandbox_CheckUpstairs_Radius = "Zone de recherche",
+	Sandbox_CheckUpstairs_Radius_tooltip = "Rayon dans lequel un zombie doit se trouver pour être détecté.",
+
+	Sandbox_CheckUpstairs_ShowZombie = "Afficher la position des zombies",
+	Sandbox_CheckUpstairs_ShowZombie_tooltip = "Affiche la position des zombies en montrant leur nom au-dessus de leur position.",
+
+	Sandbox_CheckUpstairs_loreNameSingular = "Nom des zombies: singulier",
+	Sandbox_CheckUpstairs_loreNameSingular_tooltip = "Nom des zombies, au singulier, qui est utilisé dans les lignes de dialogues or dans le nom du zombie. Par défaut, c'est 'zombie', garder cette option vide pour avoir le nom par défaut.",
+
+	Sandbox_CheckUpstairs_loreNamePlurial = "Nom des zombies: pluriel",
+	Sandbox_CheckUpstairs_loreNameSingular_tooltip = "Nom des zombies, au pluriel, qui est utilisé dans les lignes de dialogues or dans le nom du zombie. Par défaut, c'est 'zombie', garder cette option vide pour avoir le nom par défaut.",
+}
