@@ -1,39 +1,39 @@
 version=1
 id=3300688173
 title=Check Upstairs
-description=Original concept by Braven with his [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3044807092]Stairs Alert[/url] mod.
-description=
-description=This is a complete new take on the mechanic, with fresh code and proper check. The original mod by Braven didn't properly detect zombies so this version fixes this and improves everything.
-description=
-description=[quote]
-description=[h1]How to use:[/h1]
-description=[list]
-description=[*] When in stairs, press the keybind to check upstairs. By default, it is the same key as "Interact": E.
-description=[*] This will check in a circle around the square at the top of the stairs.
-description=[*] If any zombies are detected, their amount will be shown above the player. Be careful as this can draw the attention of zombies !
-description=[*] If no zombies are detected, your player will mention it.
-description=[/list]
-description=[/quote]
-description=[quote]
-description=[h1]Customize your experience:[/h1]
-description=[list]
-description=[*] Change your [b]keybind[/b] thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] !
-description=[*] Adapt your sandbox options to your liking ! You can increase the radius which the character checks for zombies at the top of the stairs. You can chose to show the zombie position or not.
-description=[*] Chose the lore name of the your zombies ! This can also be done with a mod (check the next part about modder's documentation).
-description=[*] Native compatibility with [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044]Zomboid Forge[/url] ! This will show the name of the zombie type instead simply "zombie" and take into consideration the nametag options of the user (font, duration...).
-description=[/list]
-description=[/quote]
-description=[quote]
-description=[h1]Customization available to other modders[/h1]
-description=Other modders can easily modify the mod and its parameters ! Add your own voicelines or modify the name to show above zombies or in the voicelines ! For example, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3248766883]The Last of Us Infected[/url] will not mention "zombies" but instead "infected".
-description=
-description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckUpstairs.md]Documentation for modders[/url]
-description=[/quote]
-description=
-description=
-description=[hr][/hr]
-description=[url=https://ko-fi.com/sirdoggyjvla][img]https://raw.githubusercontent.com/ChuckTheSheep/chuckImages/main/kofi.png[/img][/url][url=https://discord.gg/SReMnbV4V7][img]https://raw.githubusercontent.com/Chuckleberry-Finn/chuckImages/main/PZmodCommBanner1.png[/img][/url]
-description=
-description=[url=https://discord.gg/VteSYrd4mW][img]https://raw.githubusercontent.com/SirDoggyJvla/Project-Overgrown/main/images/banners/server_banner.png[/img][/url]
+description=Original concept by Braven with his [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3044807092]Stairs Alert[/url] mod.
+description=
+description=This is a complete new take on the mechanic, with fresh code and proper check. The original mod by Braven didn't properly detect zombies so this version fixes this and improves everything.
+description=
+description=[quote]
+description=[h1]How to use:[/h1]
+description=[list]
+description=[*] When in stairs, press the keybind to check upstairs. By default, it is the same key as "Interact": E.
+description=[*] This will check in a circle around the square at the top of the stairs.
+description=[*] If any zombies are detected, their amount will be shown above the player. Be careful as this can draw the attention of zombies !
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=[/quote]
+description=[quote]
+description=[h1]Customize your experience:[/h1]
+description=[list]
+description=[*] Change your [b]keybind[/b] thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] !
+description=[*] Adapt your sandbox options to your liking ! You can increase the radius which the character checks for zombies at the top of the stairs. You can chose to show the zombie position or not.
+description=[*] Chose the lore name of the your zombies ! This can also be done with a mod (check the next part about modder's documentation).
+description=[*] Native compatibility with [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044]Zomboid Forge[/url] ! This will show the name of the zombie type instead simply "zombie" and take into consideration the nametag options of the user (font, duration...).
+description=[/list]
+description=[/quote]
+description=[quote]
+description=[h1]Customization available to other modders[/h1]
+description=Other modders can easily modify the mod and its parameters ! Add your own voicelines or modify the name to show above zombies or in the voicelines ! For example, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3248766883]The Last of Us Infected[/url] will not mention "zombies" but instead "infected".
+description=
+description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckUpstairs.md]Documentation for modders[/url]
+description=[/quote]
+description=
+description=
+description=[hr][/hr]
+description=[url=https://ko-fi.com/sirdoggyjvla][img]https://raw.githubusercontent.com/ChuckTheSheep/chuckImages/main/kofi.png[/img][/url][url=https://discord.gg/SReMnbV4V7][img]https://raw.githubusercontent.com/Chuckleberry-Finn/chuckImages/main/PZmodCommBanner1.png[/img][/url]
+description=
+description=[url=https://discord.gg/VteSYrd4mW][img]https://raw.githubusercontent.com/SirDoggyJvla/Project-Overgrown/main/images/banners/server_banner.png[/img][/url]
 tags=Build 41;Balance;Interface;Misc;Realistic
 visibility=public
