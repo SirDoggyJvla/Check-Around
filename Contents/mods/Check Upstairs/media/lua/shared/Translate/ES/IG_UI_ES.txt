@@ -1,0 +1,33 @@
+IGUI_ES = {
+	/* Zombie Name */
+	IGUI_CheckUpstairs_zombieName							= "zombie",
+	IGUI_CheckUpstairs_zombiesName							= "zombies",
+
+	/* No zombies upstairs */
+	IGUI_CheckUpstairs_noZombies1							= "No veo ningún %s arriba.",
+	IGUI_CheckUpstairs_noZombies2							= "No parece haber nada allá arriba.",
+	IGUI_CheckUpstairs_noZombies3							= "Debería ser seguro subir",
+	IGUI_CheckUpstairs_noZombies4							= "Nada sospechoso ahí arriba.",
+	IGUI_CheckUpstairs_noZombies5							= "El piso de arriba está vacío.",
+	IGUI_CheckUpstairs_noZombies6							= "Ninguna amenaza detectada arriba.",
+	IGUI_CheckUpstairs_noZombies7							= "Está tranquilo arriba.",
+	IGUI_CheckUpstairs_noZombies8							= "Todo está claro allá arriba.",
+	IGUI_CheckUpstairs_noZombies9							= "No hay señales de movimiento allí arriba.",
+	IGUI_CheckUpstairs_noZombies10							= "No veo ningún peligro arriba.",
+	IGUI_CheckUpstairs_noZombies11							= "No logro ver ningún %s allá arriba.",
+	IGUI_CheckUpstairs_noZombies12							= "Parece seguro arriba.",
+
+	/* Zombies upstairs */
+	IGUI_CheckUpstairs_zombiesUpstairs1						= "Logro ver %d %s arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs2						= "Parece que hay %d %s arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs3						= "%d %s vistos allí arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs4						= "Logré ver %d %s acechando arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs5						= "Pareciera que hay %d %s esperándome.",
+	IGUI_CheckUpstairs_zombiesUpstairs6						= "Cuento %d %s arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs7						= "%d %s están ahí arriba, ¡Con cuidado!",
+	IGUI_CheckUpstairs_zombiesUpstairs8						= "Hay %d %s en el piso de arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs9						= "Veo %d %s ahí adelante.",
+	IGUI_CheckUpstairs_zombiesUpstairs10					= "Hay %d %s en el piso de arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs11					= "Veo %d %s en las sombras de arriba.",
+	IGUI_CheckUpstairs_zombiesUpstairs12					= "¡Cuidado, %d %s están ahí arriba!",
+}

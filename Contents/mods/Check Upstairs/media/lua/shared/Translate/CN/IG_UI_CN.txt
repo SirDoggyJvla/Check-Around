@@ -1,0 +1,33 @@
+IGUI_CN = {
+	/* 丧尸名称 */
+	IGUI_CheckUpstairs_zombieName = "丧尸",
+	IGUI_CheckUpstairs_zombiesName = "丧尸",
+
+	/* 楼上没有丧尸 */
+	IGUI_CheckUpstairs_noZombies1 = "我没看见任何%s在楼上",
+	IGUI_CheckUpstairs_noZombies2 = "上面似乎没什么东西",
+	IGUI_CheckUpstairs_noZombies3 = "上面应该安全可以活动",
+	IGUI_CheckUpstairs_noZombies4 = "上面没有可疑的东西",
+	IGUI_CheckUpstairs_noZombies5 = "楼上空空如也",
+	IGUI_CheckUpstairs_noZombies6 = "楼上没有威胁",
+	IGUI_CheckUpstairs_noZombies7 = "上面很安静",
+	IGUI_CheckUpstairs_noZombies8 = "一切正常",
+	IGUI_CheckUpstairs_noZombies9 = "楼上没有活...死物存在的迹象",
+	IGUI_CheckUpstairs_noZombies10 = "我没看到任何有危险的东西",
+	IGUI_CheckUpstairs_noZombies11 = "我连一只%s都没看到",
+	IGUI_CheckUpstairs_noZombies12 = "上面看起来很安全",
+
+	/* 楼上有丧尸 */
+	IGUI_CheckUpstairs_zombiesUpstairs1	= "草,楼上有%d个%s!",
+	IGUI_CheckUpstairs_zombiesUpstairs2 = "上面似乎有%d个%s",
+	IGUI_CheckUpstairs_zombiesUpstairs3	= "在楼上发现%d个%s",
+	IGUI_CheckUpstairs_zombiesUpstairs4	= "楼上藏着%d个%s",
+	IGUI_CheckUpstairs_zombiesUpstairs5	= "有%d个%s在等着开饭",
+	IGUI_CheckUpstairs_zombiesUpstairs6	= "让我数一数,1...楼上%d个%s!",
+	IGUI_CheckUpstairs_zombiesUpstairs7	= "楼上有%d个%s,我草!",
+	IGUI_CheckUpstairs_zombiesUpstairs8	= "有%d个%s在楼上散步呢",
+	IGUI_CheckUpstairs_zombiesUpstairs9	= "我看到%d个%s",
+	IGUI_CheckUpstairs_zombiesUpstairs10 = "楼上有%d个%s",
+	IGUI_CheckUpstairs_zombiesUpstairs11 = "上面的阴影里有%d个%s...",
+	IGUI_CheckUpstairs_zombiesUpstairs12 = "小心,我足够让这%d个%s饱餐一顿了",
+}

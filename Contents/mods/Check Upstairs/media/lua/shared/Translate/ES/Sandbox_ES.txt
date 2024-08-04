@@ -1,0 +1,17 @@
+Sandbox_ES = {
+	/* Page names */
+	Sandbox_CheckUpstairs = "Check Upstairs",
+
+	/* CheckUpstairs */
+	Sandbox_CheckUpstairs_Radius = "Radio de arriba de las escaleras",
+	Sandbox_CheckUpstairs_Radius_tooltip = "Define el radio en el cual los zombies tienen que estar arriba de las escaleras para ser detectados por el jugador.",
+
+	Sandbox_CheckUpstairs_ShowZombieNametag = "Muestrar la posición de los zombies",
+	Sandbox_CheckUpstairs_ShowZombieNametag_tooltip = "Esto indicará la posición de los zombies mostrándo su nombre encima.",
+
+	Sandbox_CheckUpstairs_loreNameSingular = "Nombre de los zombies en singular",
+	Sandbox_CheckUpstairs_loreNameSingular_tooltip = "El nombre del zombi, en singular, que se menciona en las líneas de voz o la etiqueta del nombre del zombi. Por defecto, es 'zombi'. Déjalo vacío para tener el nombre por defecto.",
+
+	Sandbox_CheckUpstairs_loreNamePlurial = "Nombre de los zombies en plural",
+	Sandbox_CheckUpstairs_loreNamePlurial_tooltip = ""El nombre de los zombis, en plural, que se referencia en las líneas de voz o en la etiqueta de nombre del zombi. Por defecto, es 'zombies', déjalo vacío para usar el nombre predeterminado.",
+}
