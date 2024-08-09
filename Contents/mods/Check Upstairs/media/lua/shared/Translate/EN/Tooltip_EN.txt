@@ -1,0 +1,4 @@
+Tooltip_EN = {
+    Tooltip_CantCheckThroughWindow_curtain = "Can't check through the window because of the curtains.",
+    Tooltip_CantCheckThroughWindow_notOpen = "Can't check through the window because it is not open.",
+}

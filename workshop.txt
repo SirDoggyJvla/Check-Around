@@ -10,7 +10,7 @@ description=[h1]How to use:[/h1]
 description=[list]
 description=[*] When in stairs, press the keybind to check upstairs. By default, it is the same key as "Interact": E.
 description=[*] This will check in a circle around the square at the top of the stairs.
-description=[*] If any zombies are detected, their amount will be shown above the player. Be careful as this can draw the attention of zombies !
+description=[*] If any zombies are detected, their amount will be shown above the player.
 description=[*] If no zombies are detected, your player will mention it.
 description=[/list]
 description=[/quote]
@@ -28,6 +28,15 @@ description=[h1]Customization available to other modders[/h1]
 description=Other modders can easily modify the mod and its parameters ! Add your own voicelines or modify the name to show above zombies or in the voicelines ! For example, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3248766883]The Last of Us Infected[/url] will not mention "zombies" but instead "infected".
 description=
 description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckUpstairs.md]Documentation for modders[/url]
+description=[/quote]
+description=[quote]
+description=[h1]Translations by:[/h1]
+description=[list]
+description=[*] French by [url=https://steamcommunity.com/id/KingoRodriguo]Rodriguo[/url] (don't ask me why the guy with a spanish name does the french one)
+description=[*] Spanish by [url=https://steamcommunity.com/profiles/76561199075622146]Zatrox (meza)[/url]
+description=[*] Traditional and simplified Chinese by [url=https://steamcommunity.com/id/Fragger_P1ayeroo1/]Fragger[/url]
+description=[/list]
+description=
 description=[/quote]
 description=
 description=
