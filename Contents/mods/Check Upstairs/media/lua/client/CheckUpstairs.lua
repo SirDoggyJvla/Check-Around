@@ -403,7 +403,6 @@ CheckUpstairs.DrawNameTag = function(zombie,ticks)
 end
 
 CheckUpstairs.HandleVisuals = function(zombie)
-    print("test")
     local zombieModData = zombie:getModData()
 
     -- skip if shouldn't show nametag
