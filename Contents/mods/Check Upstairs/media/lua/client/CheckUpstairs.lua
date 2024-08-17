@@ -292,7 +292,7 @@ end
 
 CheckUpstairs.GetIsoWindowInformations = function(object)
     local isWindow = true
-    local isOpen = object:IsOpen()
+    local isOpen = object:IsOpen() or object:isDestroyed()
     local hasCurtainClosed
 
     local curtains = object:HasCurtains()
