@@ -32,6 +32,35 @@ IGUI_EN = {
 	IGUI_CheckUpstairs_zombiesBehindWindow12							= "I've spotted %d %s behind the window."
 
 
+	/* No zombies behind door */
+	IGUI_CheckUpstairs_BehindDoorNoZombies1								= "I can't see any %s behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies2								= "There isn't anything behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies3								= "Nothing behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies4								= "The door is clear.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies5								= "No threats behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies6								= "It's empty behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies7								= "Nothing suspicious behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies8								= "All's clear behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies9								= "No movement behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies10							= "The coast is clear behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies11							= "I don't see any danger behind the door.",
+	IGUI_CheckUpstairs_BehindDoorNoZombies12							= "Looks safe behind the door."
+
+	/* Zombies behind door */
+	IGUI_CheckUpstairs_zombiesBehindDoor1								= "I can see %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor2								= "There are %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor3								= "%d %s are behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor4								= "I spot %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor5								= "%d %s are lurking behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor6								= "There are %d %s waiting behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor7								= "Beware, %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor8								= "Looks like there are %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor9								= "%d %s are hiding behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor10								= "I can see %d %s moving behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor11								= "There seems to be %d %s behind the door.",
+	IGUI_CheckUpstairs_zombiesBehindDoor12								= "I've spotted %d %s behind the door."
+
+
 	/* No zombies upstairs */
 	IGUI_CheckUpstairs_CheckUpstairsNoZombies1							= "I can't see any %s up there.",
 	IGUI_CheckUpstairs_CheckUpstairsNoZombies2							= "There seems to be nothing up there.",
@@ -87,4 +116,18 @@ IGUI_EN = {
 	IGUI_CheckUpstairs_zombiesDownstairs10								= "There are %d %s on the lower floor.",
 	IGUI_CheckUpstairs_zombiesDownstairs11								= "I spot %d %s in the shadows below.",
 	IGUI_CheckUpstairs_zombiesDownstairs12								= "Beware, %d %s are down there!",
+
+	/* Spore zone behind window */
+	IGUI_CheckUpstairs_sporeZone1								= "There is a spore zone inside this building.",
+	IGUI_CheckUpstairs_sporeZone2								= "I should put an airborne protection before entering.",
+	IGUI_CheckUpstairs_sporeZone3								= "I see a spore zone inside this building.",
+	IGUI_CheckUpstairs_sporeZone4								= "Spore zone spotted inside the building.",
+	IGUI_CheckUpstairs_sporeZone5								= "There's a spore zone beyond the window.",
+	IGUI_CheckUpstairs_sporeZone6								= "A spore zone is visible inside this building.",
+	IGUI_CheckUpstairs_sporeZone7								= "I can spot spores floating inside this building.",
+	IGUI_CheckUpstairs_sporeZone8								= "Better get my mask, there's a spore zone in there.",
+	IGUI_CheckUpstairs_sporeZone9								= "The building contains a spore zone. Need to mask up.",
+	IGUI_CheckUpstairs_sporeZone10								= "Looks like there's a spore zone inside.",
+	IGUI_CheckUpstairs_sporeZone11								= "I notice spores behind the window.",
+	IGUI_CheckUpstairs_sporeZone12								= "Careful, there's a spore zone inside this place.",
 }

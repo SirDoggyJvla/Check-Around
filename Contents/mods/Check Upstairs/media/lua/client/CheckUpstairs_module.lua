@@ -50,6 +50,38 @@ local CheckUpstairs = {
         getText("IGUI_CheckUpstairs_zombiesBehindWindow12")
     },
 
+    -- Voicelines when no zombies behind door
+    Voicelines_BehindDoorNoZombies = {
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies1"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies2"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies3"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies4"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies5"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies6"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies7"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies8"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies9"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies10"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies11"),
+        getText("IGUI_CheckUpstairs_BehindDoorNoZombies12")
+    },
+
+    -- Voicelines when zombies behind window
+    Voicelines_zombiesBehindDoor = {
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor1"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor2"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor3"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor4"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor5"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor6"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor7"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor8"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor9"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor10"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor11"),
+        getText("IGUI_CheckUpstairs_zombiesBehindDoor12")
+    },
+
     -- Voicelines when no zombies upstairs
     Voicelines_CheckUpstairsNoZombies = {
         getText("IGUI_CheckUpstairs_CheckUpstairsNoZombies1"),
@@ -112,6 +144,22 @@ local CheckUpstairs = {
         getText("IGUI_CheckUpstairs_zombiesDownstairs10"),
         getText("IGUI_CheckUpstairs_zombiesDownstairs11"),
         getText("IGUI_CheckUpstairs_zombiesDownstairs12")
+    },
+
+    -- Voicelines when zombies downstairs
+    Voicelines_sporeZone = {
+        getText("IGUI_CheckUpstairs_sporeZone1"),
+        getText("IGUI_CheckUpstairs_sporeZone2"),
+        getText("IGUI_CheckUpstairs_sporeZone3"),
+        getText("IGUI_CheckUpstairs_sporeZone4"),
+        getText("IGUI_CheckUpstairs_sporeZone5"),
+        getText("IGUI_CheckUpstairs_sporeZone6"),
+        getText("IGUI_CheckUpstairs_sporeZone7"),
+        getText("IGUI_CheckUpstairs_sporeZone8"),
+        getText("IGUI_CheckUpstairs_sporeZone9"),
+        getText("IGUI_CheckUpstairs_sporeZone10"),
+        getText("IGUI_CheckUpstairs_sporeZone11"),
+        getText("IGUI_CheckUpstairs_sporeZone12")
     },
 }
 

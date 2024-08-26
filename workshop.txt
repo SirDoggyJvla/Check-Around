@@ -1,15 +1,34 @@
 version=1
 id=3300688173
-title=Check Upstairs
+title=Check Upstairs (and more !)
 description=Original concept by Braven with his [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3044807092]Stairs Alert[/url] mod.
 description=
 description=This is a complete new take on the mechanic, with fresh code and proper check. The original mod by Braven didn't properly detect zombies so this version fixes this and improves everything.
 description=
 description=[quote]
 description=[h1]How to use:[/h1]
+description=[h3]Check upstairs*[/h3]
 description=[list]
-description=[*] When in stairs, press the keybind to check upstairs. By default, it is the same key as "Interact": E.
+description=[*] When in stairs or at the bottom of it, press the keybind to check upstairs. By default, it is the same key as "Interact": E.
 description=[*] This will check in a circle around the square at the top of the stairs.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=
+description=[h3]Check downstairs*[/h3]
+description=[list]
+description=[*] When at the top square of stairs (not on the stairs), press the keybind to check downstairs. By default, it is the same key as "Interact": E.
+description=[*] This will check in a circle around the square at the bottom of the stairs.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=
+description=[i]* these options can show at the same time if you are in both conditions[/i]
+description=
+description=[h3]Check behind windows[/h3]
+description=[list]
+description=[*] Right click an opened, non-barricaded and with opened curtains window to have an option to check outside of it.
+description=[*] This will check in a circle around the square behind the window.
 description=[*] If any zombies are detected, their amount will be shown above the player.
 description=[*] If no zombies are detected, your player will mention it.
 description=[/list]
@@ -31,6 +50,7 @@ description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckU
 description=[/quote]
 description=[quote]
 description=[h1]Translations by:[/h1]
+description=[b]TRANSLATIONS NEED UPDATING, DON'T HESITATE TO CONTACT ME[/b]
 description=[list]
 description=[*] French by [url=https://steamcommunity.com/id/KingoRodriguo]Rodriguo[/url] (don't ask me why the guy with a spanish name does the french one)
 description=[*] Spanish by [url=https://steamcommunity.com/profiles/76561199075622146]Zatrox (meza)[/url]

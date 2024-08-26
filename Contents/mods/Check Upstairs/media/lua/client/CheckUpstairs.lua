@@ -10,8 +10,13 @@ This file handles the mod CheckUpstairs and adds the custom keybinds.
 
 ]]--
 --[[ ================================================ ]]--
-local CheckUpstairs = require "CheckUpstairs_module"
 
+-- requirements
+local CheckUpstairs = require "CheckUpstairs_module"
+require "CheckUpstairs_patches"
+
+-- check for activated mods for patches
+local activatedMods_BB_SporeZones = getActivatedMods():contains("BB_SporeZones")
 
 CheckUpstairs.UpdateZombieName = function()
     CheckUpstairs.ZombieName = SandboxVars.CheckUpstairs.loreNameSingular ~= "" and SandboxVars.CheckUpstairs.loreNameSingular or CheckUpstairs.defaultZombieName
@@ -212,7 +217,7 @@ end
 
 
 
---#region Check for zombies window
+--#region Check for zombies window and doors
 
 -- Checks for zombies behind the window.
 ---@param _ any
@@ -244,22 +249,122 @@ CheckUpstairs.CheckWindow = function(_, playerIndex, window)
         end
     end
 
+    -- retrieve zombies in radius
     local zombies = CheckUpstairs.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()})
     CheckUpstairs.applyVoiceline(player,zombies,CheckUpstairs.Voicelines_BehindWindowsNoZombies,CheckUpstairs.Voicelines_zombiesBehindWindow)
+
+    -- Cordyceps Spore Zone compatibility
+    if activatedMods_BB_SporeZones then
+        CheckUpstairs.CheckForSporeZone(player,square_check)
+    end
 end
 
+-- Checks for zombies behind the window.
+---@param _ any
+---@param playerIndex int
+---@param door IsoThumpable|IsoDoor
+CheckUpstairs.CheckDoor = function(_, playerIndex, door)
+    local square = door:getSquare()
+
+    local player = getSpecificPlayer(playerIndex)
+    if not player then return end
+
+    local x = player:getX()
+    local y = player:getY()
+
+    local x_square = square:getX()
+    local y_square = square:getY()
+
+    local square_opposite = door:getOppositeSquare()
+
+    local north = door:getNorth()
+    local square_check = square
+    if north then
+        if math.floor(y) == y_square then
+            square_check = square_opposite
+        end
+    else
+        if math.floor(x) == x_square then
+            square_check = square_opposite
+        end
+    end
+
+    -- retrieve zombies in radius
+    local zombies = CheckUpstairs.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()})
+    CheckUpstairs.applyVoiceline(player,zombies,CheckUpstairs.Voicelines_BehindDoorNoZombies,CheckUpstairs.Voicelines_zombiesBehindDoor)
+
+    -- Cordyceps Spore Zone compatibility
+    if activatedMods_BB_SporeZones then
+        CheckUpstairs.CheckForSporeZone(player,square_check)
+    end
+end
+
+-- Checks for zombies behind the window.
+---@param _ any
+---@param playerIndex int
+---@param door IsoThumpable|IsoDoor
+CheckUpstairs.PeakDoor = function(_, playerIndex, door)
+    local player = getSpecificPlayer(playerIndex)
+
+    -- get player stats
+    local Lightfoot = player:getPerkLevel(Perks.Lightfoot)
+    local Nimble = player:getPerkLevel(Perks.Nimble)
+    local Sneak = player:getPerkLevel(Perks.Sneak)
+    local Graceful = player:HasTrait("Graceful") and 10 or 0
+    local Inconspicuous = player:HasTrait("Inconspicuous") and 10 or 0
+    local Conspicuous = player:HasTrait("Conspicuous") and 10 or 0
+    local Clumsy = player:HasTrait("Clumsy") and 10 or 0
+
+    -- get default value for success chance which is normalized door health
+    local doorHealth = door:getHealth()/door:getMaxHealth() * 100
+
+    -- calculate success chance
+    local successChance = doorHealth + Lightfoot + Nimble + Sneak + Graceful + Inconspicuous - Conspicuous - Clumsy
+
+    -- if not success, play a sound
+    local success = successChance <= 0 or successChance >= 100 or successChance >= ZombRand(100)
+    if not success then
+        local emitter = getWorld():getFreeEmitter()
+        local square = door:getSquare()
+        emitter:playSoundImpl("DoorCreek"..tostring(ZombRand(1,16)),square)
+        local radius = SandboxVars.CheckUpstairs.Radius + 1
+        addSound(nil, square:getX(), square:getY(), square:getZ(), radius, radius)
+    end
+
+    CheckUpstairs.CheckDoor(_, playerIndex, door)
+end
+
+-- Retrieve informations of `object`, an `IsoThumpable`:
+-- - `isWindow`
+-- - `isOpen`
+-- - `hasCurtainClosed`
+-- - `isDoor`
+---@param object IsoThumpable
+---@return boolean|nil -- isWindow
+---@return boolean|nil -- isOpen
+---@return boolean|nil -- hasCurtainClosed
+---@return boolean|nil -- isDoor
+---@return boolean|nil -- isBarricaded (for doors)
 CheckUpstairs.GetIsoThumpableInformations = function(object)
     local isWindow
     local isOpen
     local hasCurtainClosed
+    local isDoor
+    local isBarricaded = object:isBarricaded()
 
+    local isDoorFrame = object:isDoorFrame()
+
+    -- to iterate through objects on the same square
+    local objects
+    local getObject
+
+    -- object is a window
     if object:isWindow() then
         isWindow = true
         isOpen = true
 
         -- check if window is on IsoThumpable and check for that window stats instead
-        local objects = object:getSquare():getObjects()
-        local getObject
+        objects = object:getSquare():getObjects()
         for i = 0, objects:size() - 1 do
             getObject = objects:get(i)
             if instanceof(getObject,"IsoWindow") and getObject:getNorth() == object:getNorth() then
@@ -272,7 +377,7 @@ CheckUpstairs.GetIsoThumpableInformations = function(object)
         hasCurtainClosed = curtains and not curtains:IsOpen()
 
         -- check for barricades to make sure window is open
-        if object:isBarricaded() then
+        if isBarricaded then
             local barricades = object:getBarricadeOnSameSquare()
             local blockVision = barricades and barricades:isBlockVision()
 
@@ -285,21 +390,71 @@ CheckUpstairs.GetIsoThumpableInformations = function(object)
                 end
             end
         end
+
+    -- object is a door
+    elseif object:isDoor() or isDoorFrame then
+        isDoor = true
+        isOpen = object:IsOpen() or object:isDestroyed() or isDoorFrame
+
+        -- check if door is on IsoThumpable and check for that door stats instead
+        objects = object:getSquare():getObjects()
+        for i = 0, objects:size() - 1 do
+            getObject = objects:get(i)
+            if instanceof(getObject,"IsoDoor") and getObject:getNorth() == object:getNorth() then
+                return CheckUpstairs.GetIsoDoorInformations(getObject)
+            elseif instanceof(getObject,"IsoThumpable") and getObject:getNorth() == object:getNorth() then
+                print(getObject)
+                if getObject:isDoor() then
+                    return CheckUpstairs.GetIsoDoorInformations(getObject)
+                end
+            end
+        end
     end
 
-    return isWindow, isOpen, hasCurtainClosed
+    return isWindow, isOpen, hasCurtainClosed, isDoor, isBarricaded
 end
 
+-- Retrieve informations of `object`, an `IsoDoor`:
+-- - `isWindow`
+-- - `isOpen`
+-- - `hasCurtainClosed`
+-- - `isDoor`
+---@param object IsoWindow
+---@return nil -- not a window
+---@return boolean|nil -- isOpen
+---@return nil -- don't care about curtains
+---@return boolean|nil -- isDoor
+---@return boolean|nil -- isBarricaded (for doors)
+CheckUpstairs.GetIsoDoorInformations = function(object)
+    local isDoor = true
+    local isOpen = object:IsOpen() or object:isDestroyed()
+    local isBarricaded = object:isBarricaded()
+
+    return nil, isOpen, nil, isDoor, isBarricaded
+end
+
+-- Retrieve informations of `object`, an `IsoWindow`:
+-- - `isWindow`
+-- - `isOpen`
+-- - `hasCurtainClosed`
+-- - `isDoor`
+---@param object IsoWindow
+---@return boolean|nil -- isWindow
+---@return boolean|nil -- isOpen
+---@return boolean|nil -- hasCurtainClosed
+---@return nil -- not a door
+---@return boolean|nil -- isBarricaded (for doors)
 CheckUpstairs.GetIsoWindowInformations = function(object)
     local isWindow = true
     local isOpen = object:IsOpen() or object:isDestroyed()
     local hasCurtainClosed
+    local isBarricaded = object:isBarricaded()
 
     local curtains = object:HasCurtains()
     hasCurtainClosed = curtains and not curtains:IsOpen()
 
     -- check for barricades to make sure window is open
-    if isOpen and object:isBarricaded() then
+    if isOpen and isBarricaded then
         local barricades = object:getBarricadeOnSameSquare()
         local blockVision = barricades and barricades:isBlockVision()
 
@@ -313,35 +468,80 @@ CheckUpstairs.GetIsoWindowInformations = function(object)
         end
     end
 
-    return isWindow, isOpen, hasCurtainClosed
+    return isWindow, isOpen, hasCurtainClosed, nil, isBarricaded
 end
 
-CheckUpstairs.IsWindow = function(object)
-    if instanceof(object,"IsoThumpable") then
-        return CheckUpstairs.GetIsoThumpableInformations(object)
-    elseif instanceof(object,"IsoWindow") then
+-- Check if `object` is a window and it's various states.
+---@param object any
+---@return boolean|nil -- isWindow
+---@return boolean|nil -- isOpen
+---@return boolean|nil -- hasCurtainClosed
+---@return boolean|nil -- isDoor
+---@return boolean|nil -- isBarricaded (for doors)
+CheckUpstairs.IsWindowOrDoor = function(object)
+    if instanceof(object,"IsoWindow") then
         return CheckUpstairs.GetIsoWindowInformations(object)
+    elseif instanceof(object,"IsoDoor") then
+        return CheckUpstairs.GetIsoDoorInformations(object)
+    elseif instanceof(object,"IsoThumpable") then
+        return CheckUpstairs.GetIsoThumpableInformations(object)
     end
 
-    return nil,nil,nil
+    -- IF ISOBOJECT, YOU CAN CHECK FOR DOOR FRAME THIS WAY
+    -- BUT IT NEEDS A WAY TO GET THE OPPOSITE SQUARE TO THE PLAYER
+    -- local prop = object:getSprite():getProperties()
+    -- if prop:Is(IsoFlagType.DoorWallW) or prop:Is(IsoFlagType.DoorWallN) then
+    --     print("door frame")
+
+    --     return nil, true, nil, true, nil
+    -- end
+
+    return nil, nil, nil, nil,nil
 end
 
+-- Check if there is a window
 CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worldObjects, test)
+    local player = getSpecificPlayer(playerIndex)
+
+    -- objects can be in duplicate in the `worldObjects` for some reasons
     local objects = {}
-    for _,v in ipairs(worldObjects) do
-        objects[v] = true
+    for i = 1,#worldObjects + 1 do
+        objects[worldObjects[i]] = true
     end
 
+    -- iterate through every objects
+    local isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded,square,dist,option
     for object,_ in pairs(objects) do
-        local isWindow,isOpen,hasCurtainClosed = CheckUpstairs.IsWindow(object)
+        -- check if window and get other states of object
+        isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded = CheckUpstairs.IsWindowOrDoor(object)
 
+        -- object is window
         if isWindow then
-            local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), objects, CheckUpstairs.CheckWindow, playerIndex, object)
-            if hasCurtainClosed then
+            -- add new option to check behind window
+            option = context:addOption(getText("ContextMenu_CheckThroughWindow"), objects, CheckUpstairs.CheckWindow, playerIndex, object)
+
+            -- check distance from window or door
+            square = object:getSquare()
+            dist = IsoUtils.DistanceTo(
+                square:getX(),square:getY(),square:getZ(),
+                player:getX(),player:getY(),player:getZ()
+            )
+
+            -- window is too far to check through
+            if dist > 1.5 then
+                option.notAvailable = true
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_CantCheckThroughWindow_tooFar")
+                option.toolTip = tooltip
+
+            -- curtains are blocking vision
+            elseif hasCurtainClosed then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughWindow_curtain")
                 option.toolTip = tooltip
+
+            -- window needs to be open to peak through
             elseif not isOpen then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
@@ -349,6 +549,44 @@ CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worl
                 option.toolTip = tooltip
             end
 
+            -- window found, no point in checking other objects
+            break
+
+        -- object is door
+        elseif isDoor then
+            -- check distance from window or door
+            square = object:getSquare()
+            dist = IsoUtils.DistanceTo(
+                square:getX(),square:getY(),square:getZ(),
+                player:getX(),player:getY(),player:getZ()
+            )
+
+            -- add new option to check behind door or peak it if not open
+            if not isOpen then
+                option = context:addOption(getText("ContextMenu_PeakDoor"), objects, CheckUpstairs.PeakDoor, playerIndex, object)
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_PeakBehindDoor")
+                option.toolTip = tooltip
+            else
+                option = context:addOption(getText("ContextMenu_CheckBehindDoor"), objects, CheckUpstairs.CheckDoor, playerIndex, object)
+            end
+
+            -- door is too far to check it
+            if dist > 1.5 then
+                option.notAvailable = true
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_CantCheckThroughDoor_tooFar")
+                option.toolTip = tooltip
+
+            -- barricaded means we can't peak it
+            elseif isBarricaded then
+                option.notAvailable = true
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_CantCheckThroughDoor_barricaded")
+                option.toolTip = tooltip
+            end
+
+            -- door found, no point in checking other objects
             break
         end
     end
@@ -402,6 +640,7 @@ CheckUpstairs.DrawNameTag = function(zombie,ticks)
     nametag:AddBatchedDraw(sx, sy, true)
 end
 
+-- Update visuals of zombies, their nametags
 CheckUpstairs.HandleVisuals = function(zombie)
     local zombieModData = zombie:getModData()
 
