@@ -1,4 +1,35 @@
 IGUI_EN = {
+	/* Mod Options */
+	IGUI_CheckUpstairs													= "Check Upstairs",
+
+	/* Main joypad button for checking upstairs or downstairs */
+	IGUI_CheckUpstairs_mainJoypad 										= "Main joypad control",
+	IGUI_CheckUpstairs_mainJoypad_tooltip								= "Main button which will trigger the checking of upstairs or downstairs for joypad users.",
+	IGUI_CheckUpstairs_AButton 											= "AButton",
+	IGUI_CheckUpstairs_BButton 											= "BButton",
+	IGUI_CheckUpstairs_XButton 											= "XButton",
+	IGUI_CheckUpstairs_YButton 											= "YButton",
+	IGUI_CheckUpstairs_LBumper 											= "LBumper",
+	IGUI_CheckUpstairs_RBumper 											= "RBumper",
+	IGUI_CheckUpstairs_Back 											= "Back",
+	IGUI_CheckUpstairs_Start 											= "Start",
+	IGUI_CheckUpstairs_LStickButton 									= "LStickButton",
+	IGUI_CheckUpstairs_RStickButton 									= "RStickButton",
+	IGUI_CheckUpstairs_Other 											= "Other",
+	IGUI_CheckUpstairs_DPadLeft 										= "DPadLeft",
+	IGUI_CheckUpstairs_DPadRight 										= "DPadRight",
+	IGUI_CheckUpstairs_DPadUp 											= "DPadUp",
+	IGUI_CheckUpstairs_DPadDown 										= "DPadDown",
+
+	/* Secondary joypad button for checking upstairs or downstairs */
+	IGUI_CheckUpstairs_secondaryJoypad 									= "Secondary joypad control",
+	IGUI_CheckUpstairs_secondaryJoypad_tooltip							= "Secondary button which will need to be pressed alongside the main button for checking of upstairs or downstairs for joypad users.",
+	IGUI_CheckUpstairs_None												= "None",
+	IGUI_CheckUpstairs_RT												= "RT",
+	IGUI_CheckUpstairs_LT												= "LT",
+	IGUI_CheckUpstairs_RB												= "RB",
+	IGUI_CheckUpstairs_LB												= "LB",
+
 	/* Zombie Name */
 	IGUI_CheckUpstairs_zombieName										= "zombie",
 	IGUI_CheckUpstairs_zombiesName										= "zombies",

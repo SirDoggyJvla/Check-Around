@@ -6,7 +6,7 @@
 --[[ ================================================ ]]--
 --[[
 
-This file handles the mod CheckUpstairs and adds the custom keybinds.
+This file handles the mod CheckUpstairs.
 
 ]]--
 --[[ ================================================ ]]--
@@ -24,21 +24,3 @@ Events.OnZombieUpdate.Add(CheckUpstairs.HandleVisuals)
 
 -- check context menu
 Events.OnFillWorldObjectContextMenu.Add(CheckUpstairs.OnFillWorldObjectContextMenu)
-
-
--- Add the keybinds with Mod Options
-if ModOptions and ModOptions.AddKeyBinding then
-    local checkUpstairs_key = {
-        key = Keyboard.KEY_E,  --default
-        name = "checkUpstairs",  -- just id (user won't see this name)
-    }
-
-    local function CheckUpstairs_keyPress(keynum)
-        if keynum == checkUpstairs_key.key then
-            CheckUpstairs.checkForZombies()
-        end
-    end
-    Events.OnKeyPressed.Add(CheckUpstairs_keyPress)
-
-    ModOptions:AddKeyBinding("[Combat]",checkUpstairs_key)
-end

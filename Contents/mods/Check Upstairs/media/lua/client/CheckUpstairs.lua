@@ -206,8 +206,8 @@ CheckUpstairs.checkForZombies_downstairs = function(player)
 end
 
 -- Checks if zombies are upstairs and show then or make the character say a line, if in a staircase.
-CheckUpstairs.checkForZombies = function()
-    local player = getPlayer()
+CheckUpstairs.checkForZombies = function(player)
+    player = player or getPlayer()
 
     CheckUpstairs.checkForZombies_upstairs(player)
     CheckUpstairs.checkForZombies_downstairs(player)
