@@ -99,6 +99,8 @@ CheckUpstairs.getStairTopCoordinates = function(player)
     local y = player:getY()
     local z = player:getZ()
     local square = player:getSquare()
+    -- player is probably in the air
+    if not square then return nil end
 
     local top_square_x
     local top_square_y
@@ -119,7 +121,7 @@ CheckUpstairs.getStairTopCoordinates = function(player)
     else
         -- check X direction
         square = getSquare(x-1,y,z)
-        if square:HasStairsWest() then
+        if square and square:HasStairsWest() then
             top_square_x = - 4 + x + 3*(z - math.floor(z))
             top_square_y = y
             top_square_z = math.floor(z) + 1
@@ -127,7 +129,7 @@ CheckUpstairs.getStairTopCoordinates = function(player)
 
         -- check Y direction
         square = getSquare(x,y-1,z)
-        if square:HasStairsNorth() then
+        if square and square:HasStairsNorth() then
             top_square_x = - 4 + x + 3*(z - math.floor(z))
             top_square_y = y
             top_square_z = math.floor(z) + 1
@@ -150,18 +152,21 @@ end
 ---@param player IsoPlayer
 ---@return table|nil
 CheckUpstairs.getStairBottomCoordinates = function(player)
+    -- player coordinates
     local x = player:getX()
     local y = player:getY()
     local z = player:getZ()
 
+    -- prepare variables
     local top_square_x
     local top_square_y
     local top_square_z
 
+    -- verify floor below exists (until B42 release at least)
     local z_below = z-1
-
     if z_below < 0 then return nil end
 
+    -- check Y direction
     local square = getSquare(x,y+1,z_below)
     if square and square:HasStairsNorth() then
         top_square_x = x
@@ -169,6 +174,7 @@ CheckUpstairs.getStairBottomCoordinates = function(player)
         top_square_z = math.floor(z) - 1
     end
 
+    -- check X direction
     square = getSquare(x+1,y,z_below)
     if square and square:HasStairsWest() then
         top_square_x =  4 + x + 3*(z - math.floor(z))
