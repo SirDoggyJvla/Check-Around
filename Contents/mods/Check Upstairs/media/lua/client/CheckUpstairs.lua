@@ -309,7 +309,7 @@ end
 ---@param _ any
 ---@param playerIndex int
 ---@param door IsoThumpable|IsoDoor
-CheckUpstairs.PeakDoor = function(_, playerIndex, door)
+CheckUpstairs.PeekDoor = function(_, playerIndex, door)
     local player = getSpecificPlayer(playerIndex)
 
     -- get player stats
@@ -547,7 +547,7 @@ CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worl
                 tooltip.description = getText("Tooltip_CantCheckThroughWindow_curtain")
                 option.toolTip = tooltip
 
-            -- window needs to be open to peak through
+            -- window needs to be open to peek through
             elseif not isOpen then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
@@ -567,11 +567,11 @@ CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worl
                 player:getX(),player:getY(),player:getZ()
             )
 
-            -- add new option to check behind door or peak it if not open
+            -- add new option to check behind door or peek it if not open
             if not isOpen then
-                option = context:addOption(getText("ContextMenu_PeakDoor"), objects, CheckUpstairs.PeakDoor, playerIndex, object)
+                option = context:addOption(getText("ContextMenu_PeekDoor"), objects, CheckUpstairs.PeekDoor, playerIndex, object)
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
-                tooltip.description = getText("Tooltip_PeakBehindDoor")
+                tooltip.description = getText("Tooltip_PeekBehindDoor")
                 option.toolTip = tooltip
             else
                 option = context:addOption(getText("ContextMenu_CheckBehindDoor"), objects, CheckUpstairs.CheckDoor, playerIndex, object)
@@ -584,7 +584,7 @@ CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worl
                 tooltip.description = getText("Tooltip_CantCheckThroughDoor_tooFar")
                 option.toolTip = tooltip
 
-            -- barricaded means we can't peak it
+            -- barricaded means we can't peek it
             elseif isBarricaded then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
