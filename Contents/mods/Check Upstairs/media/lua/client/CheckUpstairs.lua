@@ -66,12 +66,16 @@ CheckUpstairs.getZombiesInRadius = function(player,coordinates)
     -- Get zombies top of the stairs in the Radius
     local radius = SandboxVars.CheckUpstairs.Radius  + 0.5
     local zombies = {}
-    local zombie
+    local zombie, z_z
     for i = 0, zombieList:size() - 1 do
         -- get zombie
         zombie = zombieList:get(i)
+
+        -- get zombie coordinates
+        z_z = zombie:getZ()
+
         -- check zombie is top floor or in stairs of top floor
-        if math.floor(zombie:getZ()) == z then
+        if z_z - z_z%1 == z then
             -- get distance
             local d = math.sqrt( (zombie:getX() - x)^2 + (zombie:getY() - y)^2 )
             -- check if in radius of square of top stairs
@@ -511,7 +515,7 @@ CheckUpstairs.OnFillWorldObjectContextMenu = function(playerIndex, context, worl
 
     -- objects can be in duplicate in the `worldObjects` for some reasons
     local objects = {}
-    for i = 1,#worldObjects + 1 do
+    for i = 1,#worldObjects do
         objects[worldObjects[i]] = true
     end
 
