@@ -1,95 +1,95 @@
 version=1
 id=3300688173
-title=Check Upstairs (and more !)
-description=Ever felt like peaking through a window or door or looking upstairs or downstairs was a natural human trait ? 
-description=
-description=Now you can do it in Project Zomboid ! Saving you from those nasty floors hiding zombies upstairs, or even downstairs ! You can also check behind windows or door ! But peaking a closed door can have risks and cause a creeking sound that can attract zombies in the next room ! Or even players...
-description=
-description=[quote]
-description=[h1]How to use:[/h1]
-description=[h3]Check upstairs*[/h3]
-description=[list]
-description=[*] When in stairs or at the bottom of it, press the keybind to check upstairs. By default, it is the same key as "Interact": E**.
-description=[*] This will check in a circle around the square at the top of the stairs.
-description=[*] If any zombies are detected, their amount will be shown above the player.
-description=[*] If no zombies are detected, your player will mention it.
-description=[/list]
-description=
-description=[h3]Check downstairs*[/h3]
-description=[list]
-description=[*] When at the top square of stairs (not on the stairs), press the keybind to check downstairs. By default, it is the same key as "Interact": E**.
-description=[*] This will check in a circle around the square at the bottom of the stairs.
-description=[*] If any zombies are detected, their amount will be shown above the player.
-description=[*] If no zombies are detected, your player will mention it.
-description=[/list]
-description=
-description=[i]* these voicelines can appear at the same time if you are in both conditions
-description=** for controller users, you can setup keybinds thanks to Mod Options. By default these are RB + A[/i]
-description=
-description=[h3]Check behind windows[/h3]
-description=[list]
-description=[*] Right click an opened, non-barricaded and with opened curtains window to have an option to check outside of it.
-description=[*] This will check in a circle around the square behind the window.
-description=[*] If any zombies are detected, their amount will be shown above the player.
-description=[*] If no zombies are detected, your player will mention it.
-description=[/list]
-description=
-description=[h3]Check behind doors[/h3]
-description=[list]
-description=[*] Right click a non-barricaded door to have an option to check behind it.
-description=[*] This will check in a circle around the square behind the door.
-description=[*] If any zombies are detected, their amount will be shown above the player.
-description=[*] If no zombies are detected, your player will mention it.
-description=[*] But take care ! If the door is closed, you will have to peak it first which could possibly cause a creeking noise based on the health of the door and your sneaking skills: Nimble, Lightfoot, Sneaking.
-description=[*] Your traits can also influence your chance to cause a creeking noise: Graceful, Inconspicuous, Conspicuous, Clumsy.
-description=[*] 15 sounds from [url=https://pixabay.com/sound-effects/door-creek-20346/]Pixabay[/url].
-description=[/list]
-description=[/quote]
-description=[quote]
-description=[h1]Customize your experience:[/h1]
-description=[list]
-description=[*] Change your [b]keybind[/b] thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] !
-description=[*] Adapt your sandbox options to your liking ! You can increase the radius which the character checks for zombies at the top of the stairs. You can chose to show the zombie position or not.
-description=[*] Chose the lore name of the your zombies ! This can also be done with a mod (check the next part about modder's documentation).
-description=[/list]
-description=[/quote]
-description=[quote]
-description=[h1]Customization available to other modders[/h1]
-description=Other modders can easily modify the mod and its parameters ! Add your own voicelines or modify the name to show above zombies or in the voicelines ! For example, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3248766883]The Last of Us Infected[/url] will not mention "zombies" but instead "infected".
-description=
-description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckUpstairs.md]Documentation for modders[/url]
-description=[/quote]
-description=[quote]
-description=[h1]Translations by:[/h1]
-description=[list]
-description=[*] French by [url=https://steamcommunity.com/id/KingoRodriguo]Rodriguo[/url] (don't ask me why the guy with a spanish name does the french one)
-description=[*] Spanish by [url=https://steamcommunity.com/profiles/76561199075622146]Zatrox (meza)[/url]
-description=[*] Traditional and simplified Chinese by [url=https://steamcommunity.com/id/Fragger_P1ayeroo1/]Fragger[/url]
-description=[/list]
-description=[b]TRANSLATIONS NEED UPDATING, DON'T HESITATE TO CONTACT ME[/b]
-description=[/quote]
-description=
-description=[table]
-description=[tr]
-description=[td] [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044] [img]https://steamuserimages-a.akamaihd.net/ugc/2483249507243324251/E4E4C714BAFDDF52F583CF510176F4B6E07D1FA8/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false[/img] [/url] [/td]
-description=[td]Native compatibility with [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044]Zomboid Forge[/url] ! This will show the nametag of the zombie type instead of simply "zombie" above their head and take into consideration the nametag options of the user (font, duration...). [/td]
-description=[/tr]
-description=[tr]
-description=[td] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3006143351] [img]https://steamuserimages-a.akamaihd.net/ugc/2192750207407278049/D52475547F9F8EDF55A4A8A25CA71C9D93084AC2/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false[/img] [/url] [/td]
-description=[td]You can check for Spore Zones within buildings thanks to this mod. Simply check behind a window or a door, or peak a door and a custom voiceline will play that indicates for spore zones if present ! [/td]
-description=[/tr]
-description=[/table]
-description=
-description=[hr][/hr]
-description=
-description=Original concept by Braven with his [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3044807092]Stairs Alert[/url] mod.
-description=
-description=This is a complete new take on the mechanic, with fresh code and proper check. The original mod by Braven didn't properly detect zombies so this version fixes this and improves everything.
-description=
-description=[hr][/hr]
-description=
-description=[url=https://ko-fi.com/sirdoggyjvla][img]https://raw.githubusercontent.com/ChuckTheSheep/chuckImages/main/kofi.png[/img][/url][url=https://discord.gg/SReMnbV4V7][img]https://raw.githubusercontent.com/Chuckleberry-Finn/chuckImages/main/PZmodCommBanner1.png[/img][/url]
-description=
-description=[url=https://discord.gg/VteSYrd4mW][img]https://raw.githubusercontent.com/SirDoggyJvla/Project-Overgrown/main/images/banners/server_banner.png[/img][/url]
-tags=Build 41;Balance;Interface;Misc;Realistic
+title=[B41/B42] Check Around
+description=[quote=SirDoggyJvla]
+description=Hello everyone !
+description=
+description=Mod got updated to B42 and at the same time I changed its name to Check Around ! In B41 the name is still Check Upstairs however and I did not change anything there so you shouldn't get any problems with it.
+description=[/quote]
+description=
+description=Ever felt like peaking through a window or door or looking upstairs or downstairs was a natural human trait ?
+description=
+description=Now you can do it in Project Zomboid ! Saving you from those nasty floors hiding zombies upstairs, or even downstairs ! You can also check behind windows or door ! But peaking a closed door can have risks and cause a creeking sound that can attract zombies in the next room ! Or even players...
+description=
+description=[quote]
+description=[h1]How to use:[/h1]
+description=[h3]Check upstairs*[/h3]
+description=[list]
+description=[*] When in stairs or at the bottom of it, press the keybind to check upstairs. By default, it is the same key as "Interact": E**.
+description=[*] This will check in a circle around the square at the top of the stairs.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=
+description=[h3]Check downstairs*[/h3]
+description=[list]
+description=[*] When at the top square of stairs (not on the stairs), press the keybind to check downstairs. By default, it is the same key as "Interact": E**.
+description=[*] This will check in a circle around the square at the bottom of the stairs.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=
+description=[i]* these voicelines can appear at the same time if you are in both conditions
+description=** for controller users, you can setup keybinds thanks to Mod Options. By default these are RB + A[/i]
+description=
+description=[h3]Check behind windows[/h3]
+description=[list]
+description=[*] Right click an opened, non-barricaded and with opened curtains window to have an option to check outside of it.
+description=[*] This will check in a circle around the square behind the window.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[/list]
+description=
+description=[h3]Check behind doors[/h3]
+description=[list]
+description=[*] Right click a non-barricaded door to have an option to check behind it.
+description=[*] This will check in a circle around the square behind the door.
+description=[*] If any zombies are detected, their amount will be shown above the player.
+description=[*] If no zombies are detected, your player will mention it.
+description=[*] But take care ! If the door is closed, you will have to peak it first which could possibly cause a creeking noise based on the health of the door and your sneaking skills: Nimble, Lightfoot, Sneaking.
+description=[*] Your traits can also influence your chance to cause a creeking noise: Graceful, Inconspicuous, Conspicuous, Clumsy.
+description=[*] 15 sounds from [url=https://pixabay.com/sound-effects/door-creek-20346/]Pixabay[/url].
+description=[/list]
+description=[/quote]
+description=[quote]
+description=[h1]Customize your experience:[/h1]
+description=[list]
+description=[*] Change your [b]keybind[/b] thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] !
+description=[*] Adapt your sandbox options to your liking ! You can increase the radius which the character checks for zombies at the top of the stairs. You can chose to show the zombie position or not.
+description=[*] Chose the lore name of the your zombies ! This can also be done with a mod (check the next part about modder's documentation).
+description=[/list]
+description=[/quote]
+description=[quote]
+description=[h1]Customization available to other modders[/h1]
+description=Other modders can easily modify the mod and its parameters ! Add your own voicelines or modify the name to show above zombies or in the voicelines ! For example, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3248766883]The Last of Us Infected[/url] will not mention "zombies" but instead "infected".
+description=
+description=[url=https://github.com/SirDoggyJvla/Check-Upstairs/blob/main/CheckUpstairs.md]Documentation for modders[/url]
+description=[/quote]
+description=[quote]
+description=[h1]Translations by:[/h1]
+description=[list]
+description=[*] French by [url=https://steamcommunity.com/id/KingoRodriguo]Rodriguo[/url] (don't ask me why the guy with a spanish name does the french one)
+description=[*] Spanish by [url=https://steamcommunity.com/profiles/76561199075622146]Zatrox (meza)[/url]
+description=[*] Traditional and simplified Chinese by [url=https://steamcommunity.com/id/Fragger_P1ayeroo1/]Fragger[/url]
+description=[/list]
+description=[b]TRANSLATIONS NEED UPDATING, DON'T HESITATE TO CONTACT ME[/b]
+description=[/quote]
+description=
+description=[table]
+description=[tr]
+description=[td] [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044] [img]https://steamuserimages-a.akamaihd.net/ugc/2483249507243324251/E4E4C714BAFDDF52F583CF510176F4B6E07D1FA8/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false[/img] [/url] [/td]
+description=[td]Native compatibility with [url=https://steamcommunity.com/workshop/filedetails/?id=3243131044]Zomboid Forge[/url] ! This will show the nametag of the zombie type instead of simply "zombie" above their head and take into consideration the nametag options of the user (font, duration...). [/td]
+description=[/tr]
+description=[tr]
+description=[td] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3006143351] [img]https://steamuserimages-a.akamaihd.net/ugc/2192750207407278049/D52475547F9F8EDF55A4A8A25CA71C9D93084AC2/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false[/img] [/url] [/td]
+description=[td]You can check for Spore Zones within buildings thanks to this mod. Simply check behind a window or a door, or peak a door and a custom voiceline will play that indicates for spore zones if present ! [/td]
+description=[/tr]
+description=[/table]
+description=
+description=[hr][/hr]
+description=
+description=[url=https://ko-fi.com/sirdoggyjvla][img]https://raw.githubusercontent.com/ChuckTheSheep/chuckImages/main/kofi.png[/img][/url][url=https://discord.gg/SReMnbV4V7][img]https://raw.githubusercontent.com/Chuckleberry-Finn/chuckImages/main/PZmodCommBanner1.png[/img][/url]
+description=
+description=[url=https://discord.gg/VteSYrd4mW][img]https://raw.githubusercontent.com/SirDoggyJvla/Project-Overgrown/main/images/banners/server_banner.png[/img][/url]
+tags=Build 41;Build 42;Balance;Framework;Interface;Misc;Realistic;QoL
 visibility=public

@@ -1,0 +1,38 @@
+VERSION = 1,
+
+/*---------------------------------------------------------------------
+-- Base sandbox options
+---------------------------------------------------------------------*/
+option CheckAround.Radius
+{
+	type = integer, 
+	min = 1, 
+	max = 6, 
+	default = 3,
+	page = CheckAround,
+	translation = CheckAround_Radius,
+}
+
+option CheckAround.ShowZombieNametag
+{
+	type = boolean,
+	default = true,
+	page = CheckAround,
+	translation = CheckAround_ShowZombieNametag,
+}
+
+option CheckAround.loreNameSingular
+{
+    type = string,
+    default = ,
+    page = CheckAround,
+    translation = CheckAround_loreNameSingular,
+}
+
+option CheckAround.loreNamePlurial
+{
+    type = string,
+    default = ,
+    page = CheckAround,
+    translation = CheckAround_loreNamePlurial,
+}

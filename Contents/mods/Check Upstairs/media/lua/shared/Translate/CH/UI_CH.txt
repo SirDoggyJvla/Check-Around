@@ -1,3 +1,0 @@
-UI_CH = {
-    UI_optionscreen_binding_checkUpstairs = "探查樓上、窗外的殭屍",
-}

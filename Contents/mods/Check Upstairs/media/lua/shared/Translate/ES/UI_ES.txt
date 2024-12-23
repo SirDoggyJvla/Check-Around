@@ -1,3 +1,0 @@
-UI_ES = {
-    UI_optionscreen_binding_checkUpstairs = "Revisar las escaleras",
-}
