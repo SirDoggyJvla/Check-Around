@@ -7,3 +7,4 @@ icon=icon.png
 url=https://ko-fi.com/sirdoggyjvla
 versionMin=42.0
 modversion=1.4.0
+require=\DoggyAPI

@@ -163,39 +163,32 @@ local CheckAround = {
     },
 }
 
-CheckAround.ShowNametag = function(zombie)
-    local zombieModData = zombie:getModData()
-    zombieModData.CheckAround_ticks = 200
-    zombieModData.CheckAround_nametag = TextDrawObject.new()
-    zombieModData.CheckAround_nametag:ReadString(UIFont.Small, CheckAround.ZombieName, -1)
-end
-
 --#region Debug functions to highlight squares
 -- Code by Rodriguo
 
 if isDebugEnabled() then
     local enabled = true
 
-    CheckAround.AddHighlightSquare = function(square, ISColors)
+    CheckAround.AddHighlightSquare = function(square, ISColors, priority)
         if not square or not ISColors then return end
-        table.insert(CheckAround.highlightsSquares, {square = square, color = ISColors})
+        local existingSquare = CheckAround.highlightsSquares[square]
+        if existingSquare and existingSquare.priority >= priority then return end
+
+        CheckAround.highlightsSquares[square] = {color = ISColors, priority = priority}
     end
 
     CheckAround.RenderHighLights = function()
         if not enabled then return end
 
-        if #CheckAround.highlightsSquares == 0 then return end
-        for _, highlight in ipairs(CheckAround.highlightsSquares) do
-            if highlight.square ~= nil and instanceof(highlight.square, "IsoGridSquare") then
-                local x,y,z = highlight.square:getX(), highlight.square:getY(), highlight.square:getZ()
-                local r,g,b,a = highlight.color.r, highlight.color.g, highlight.color.b, 0.8
+        -- if #CheckAround.highlightsSquares == 0 then return end
+        for square, highlight in pairs(CheckAround.highlightsSquares) do
+            local x,y,z = square:getX(), square:getY(), square:getZ()
+            local color = highlight.color
+            local r,g,b,a = color.r, color.g, color.b, color.a
 
-                local floorSprite = IsoSprite.new()
-                floorSprite:LoadFramesNoDirPageSimple('media/ui/FloorTileCursor.png')
-                floorSprite:RenderGhostTileColor(x, y, z, r, g, b, a)
-            else
-                print("Invalid square")
-            end
+            local floorSprite = IsoSprite.new()
+            floorSprite:LoadFramesNoDirPageSimple('media/ui/FloorTileCursor.png')
+            floorSprite:RenderGhostTileColor(x, y, z, r, g, b, a)
         end
     end
 end

@@ -15,9 +15,8 @@ This file handles the mod CheckAround and adds the custom keybinds.
 local CheckAround = require "CheckAround_module"
 require "CheckAround_patches"
 local CheckAround_Options = require "CheckAround_ModOptions"
-
--- check for activated mods for patches
-local activatedMods_BB_SporeZones = getActivatedMods():contains("BB_SporeZones")
+-- local ISCheckBehindDoor = require "CheckAroundTimedActions/ISCheckBehindDoor"
+local FindersTools = require "DoggyTools/FindersTools"
 
 CheckAround.UpdateZombieName = function()
     CheckAround.ZombieName = SandboxVars.CheckAround.loreNameSingular ~= "" and SandboxVars.CheckAround.loreNameSingular or CheckAround.defaultZombieName
@@ -55,45 +54,6 @@ CheckAround.applyVoiceline = function(player,zombies,voicelines_noZombies,voicel
         local voiceLine = voicelines_noZombies[ZombRand(1,#voicelines_noZombies+1)]
         player:Say(string.format(voiceLine,CheckAround.ZombieName))
     end
-end
-
--- Retrieves zombies upstairs and adds them to a table.
----@param player IsoPlayer
----@param coordinates table 
----@return table
-CheckAround.getZombiesInRadius = function(player,coordinates)
-    -- get zombieList
-    local zombieList = player:getCell():getZombieList()
-
-    -- coordinates of square top of stairs
-    local x = coordinates.x
-    local y = coordinates.y
-    local z = coordinates.z
-
-    -- Get zombies top of the stairs in the Radius
-    local radius = SandboxVars.CheckAround.Radius  + 0.5
-    local zombies = {}
-    local zombie, z_z
-    for i = 0, zombieList:size() - 1 do
-        -- get zombie
-        zombie = zombieList:get(i)
-
-        -- get zombie coordinates
-        z_z = zombie:getZ()
-
-        -- check zombie is top floor or in stairs of top floor
-        if z_z - z_z%1 == z then
-            -- get distance
-            local d = math.sqrt( (zombie:getX() - x)^2 + (zombie:getY() - y)^2 )
-            -- check if in radius of square of top stairs
-            if d <= radius then
-                -- add zombie to the table
-                table.insert(zombies,zombie)
-            end
-        end
-    end
-
-    return zombies
 end
 
 
@@ -210,7 +170,7 @@ CheckAround.checkForZombies_upstairs = function(player)
     -- retrieve top coordinates of the stair
     local topCoordinates = CheckAround.getStairTopCoordinates(player)
     if topCoordinates then
-        local zombies = CheckAround.getZombiesInRadius(player,topCoordinates)
+        local zombies = FindersTools.getZombiesInRadius(player,topCoordinates,SandboxVars.CheckAround.Radius)
         CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_CheckAroundNoZombies,CheckAround.Voicelines_zombieUpstairs)
     end
 end
@@ -219,7 +179,7 @@ CheckAround.checkForZombies_downstairs = function(player)
     -- retrieve top coordinates of the stair
     local bottomCoordinates = CheckAround.getStairBottomCoordinates(player)
     if bottomCoordinates then
-        local zombies = CheckAround.getZombiesInRadius(player,bottomCoordinates)
+        local zombies = FindersTools.getZombiesInRadius(player,bottomCoordinates,SandboxVars.CheckAround.Radius)
         CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_CheckDownstairsNoZombies,CheckAround.Voicelines_zombieDownstairs)
     end
 end
@@ -269,24 +229,19 @@ CheckAround.CheckWindow = function(_, playerIndex, window)
     end
 
     -- retrieve zombies in radius
-    local zombies = CheckAround.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()})
+    local zombies = FindersTools.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()},SandboxVars.CheckAround.Radius)
     CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_BehindWindowsNoZombies,CheckAround.Voicelines_zombiesBehindWindow)
 
-    -- Cordyceps Spore Zone compatibility
-    if activatedMods_BB_SporeZones then
-        CheckAround.CheckForSporeZone(player,square_check)
+    if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, window) then
+        ISTimedActionQueue.add(ISCheckBehindDoor:new(player, window))
     end
 end
 
 -- Checks for zombies behind the window.
----@param _ any
----@param playerIndex integer
+---@param player IsoPlayer
 ---@param door IsoThumpable|IsoDoor
-CheckAround.CheckDoor = function(_, playerIndex, door)
+CheckAround.CheckDoor = function(player, door)
     local square = door:getSquare()
-
-    local player = getSpecificPlayer(playerIndex)
-    if not player then return end
 
     local x = player:getX()
     local y = player:getY()
@@ -294,37 +249,15 @@ CheckAround.CheckDoor = function(_, playerIndex, door)
     local x_square = square:getX()
     local y_square = square:getY()
 
-    local square_opposite = door:getOppositeSquare()
-
-    local north = door:getNorth()
-    local square_check = square
-    if north then
-        if math.floor(y) == y_square then
-            square_check = square_opposite
-        end
-    else
-        if math.floor(x) == x_square then
-            square_check = square_opposite
-        end
-    end
-
-    -- retrieve zombies in radius
-    local zombies = CheckAround.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()})
-    CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_BehindDoorNoZombies,CheckAround.Voicelines_zombiesBehindDoor)
-
-    -- Cordyceps Spore Zone compatibility
-    if activatedMods_BB_SporeZones then
-        CheckAround.CheckForSporeZone(player,square_check)
+    if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, door) then
+        ISTimedActionQueue.add(ISCheckBehindDoor:new(player, door))
     end
 end
 
 -- Checks for zombies behind the window.
----@param _ any
----@param playerIndex integer
+---@param player IsoPlayer
 ---@param door IsoThumpable|IsoDoor
-CheckAround.PeekDoor = function(_, playerIndex, door)
-    local player = getSpecificPlayer(playerIndex)
-
+CheckAround.PeekDoor = function(player, door)
     -- get player stats
     local Lightfoot = player:getPerkLevel(Perks.Lightfoot)
     local Nimble = player:getPerkLevel(Perks.Nimble)
@@ -350,7 +283,7 @@ CheckAround.PeekDoor = function(_, playerIndex, door)
         addSound(nil, square:getX(), square:getY(), square:getZ(), radius, radius)
     end
 
-    CheckAround.CheckDoor(_, playerIndex, door)
+    CheckAround.CheckDoor(player, door)
 end
 
 -- Retrieve informations of `object`, an `IsoThumpable`:
@@ -528,20 +461,19 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
     end
 
     -- iterate through every objects
-    local isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded,square,dist,option
     for object,_ in pairs(objects) do
         -- check if window and get other states of object
-        isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded = CheckAround.IsWindowOrDoor(object)
+        local isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded = CheckAround.IsWindowOrDoor(object)
 
         -- object is window
         if isWindow then
             -- add new option to check behind window
-            option = context:addOption(getText("ContextMenu_CheckThroughWindow"), objects, CheckAround.CheckWindow, playerIndex, object)
+            local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), objects, CheckAround.CheckWindow, playerIndex, object)
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
             -- check distance from window or door
-            square = object:getSquare()
-            dist = IsoUtils.DistanceTo(
+            local square = object:getSquare()
+            local dist = IsoUtils.DistanceTo(
                 square:getX(),square:getY(),square:getZ(),
                 player:getX(),player:getY(),player:getZ()
             )
@@ -574,33 +506,25 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
         -- object is door
         elseif isDoor then
             -- check distance from window or door
-            square = object:getSquare()
-            dist = IsoUtils.DistanceTo(
+            local square = object:getSquare()
+            local dist = IsoUtils.DistanceTo(
                 square:getX(),square:getY(),square:getZ(),
                 player:getX(),player:getY(),player:getZ()
             )
 
             -- add new option to check behind door or peek it if not open
+            local option = context:addOption(getText("ContextMenu_CheckBehindDoor"), player, CheckAround.CheckDoor, object)
             if not isOpen then
-                option = context:addOption(getText("ContextMenu_PeekDoor"), objects, CheckAround.PeekDoor, playerIndex, object)
+                option.name = getText("ContextMenu_PeekDoor")
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_PeekBehindDoor")
                 option.toolTip = tooltip
-            else
-                option = context:addOption(getText("ContextMenu_CheckBehindDoor"), objects, CheckAround.CheckDoor, playerIndex, object)
             end
 
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
-            -- door is too far to check it
-            if dist > 1.5 then
-                option.notAvailable = true
-                local tooltip = ISWorldObjectContextMenu.addToolTip()
-                tooltip.description = getText("Tooltip_CantCheckThroughDoor_tooFar")
-                option.toolTip = tooltip
-
             -- barricaded means we can't peek it
-            elseif isBarricaded then
+            if isBarricaded then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughDoor_barricaded")
@@ -661,24 +585,89 @@ CheckAround.DrawNameTag = function(zombie,ticks)
     nametag:AddBatchedDraw(sx, sy, true)
 end
 
--- Update visuals of zombies, their nametags
-CheckAround.HandleVisuals = function(zombie)
+CheckAround.ShowNametag = function(zombie)
     local zombieModData = zombie:getModData()
 
-    -- skip if shouldn't show nametag
-    local ticks = zombieModData.CheckAround_ticks
-    if not ticks then return end
+    zombieModData.CheckAround_ticks = 200
+    zombieModData.CheckAround_nametag = TextDrawObject.new()
+    zombieModData.CheckAround_nametag:ReadString(UIFont.Small, CheckAround.ZombieName, -1)
+end
 
-    -- draw nametag
-    CheckAround.DrawNameTag(zombie,ticks)
+-- Update visuals of zombies, their nametags
+CheckAround.HandleVisuals = function(ticks)
+    local zombieList = getCell():getZombieList()
 
-    -- reduce tick value or stop showing nametag
-    if zombieModData.CheckAround_ticks > 0 then
-        zombieModData.CheckAround_ticks = ticks - 1
-    else
-        zombieModData.CheckAround_ticks = nil
-        zombieModData.CheckAround_nametag = nil
+    for i = 0, zombieList:size() - 1 do repeat
+        local zombie = zombieList:get(i)
+        local zombieModData = zombie:getModData()
+
+        -- skip if shouldn't show nametag
+        local ticks = zombieModData.CheckAround_ticks
+        if not ticks then break end
+
+        -- draw nametag
+        CheckAround.DrawNameTag(zombie,ticks)
+
+        -- reduce tick value or stop showing nametag
+        if zombieModData.CheckAround_ticks > 0 then
+            zombieModData.CheckAround_ticks = ticks - 1
+        else
+            zombieModData.CheckAround_ticks = nil
+            zombieModData.CheckAround_nametag = nil
+        end
+    until true end
+
+    SquareNametags = SquareNametags or {}
+    for square, nametag in pairs(SquareNametags) do
+        local sx = IsoUtils.XToScreen(square:getX()+0.5, square:getY()+0.5, square:getZ(), 0)
+        local sy = IsoUtils.YToScreen(square:getX()+0.5, square:getY()+0.5, square:getZ(), 0)
+
+        sx = sx - IsoCamera.getOffX()-- - square:getOffsetX()
+        sy = sy - IsoCamera.getOffY()-- - square:getOffsetY()
+
+        local zoom = getCore():getZoom(0)
+        sx = sx / zoom
+        sy = sy / zoom
+        sy = sy - nametag:getHeight()
+
+        nametag:setDefaultColors(1,1,1,1)
+        nametag:AddBatchedDraw(sx, sy, true)
     end
+
+    UniqueMarker = UniqueMarker or {}
+    for _,marker in pairs(UniqueMarker) do
+        local sx = IsoUtils.XToScreen(marker.x, marker.y, marker.z, 0)
+        local sy = IsoUtils.YToScreen(marker.x, marker.y, marker.z, 0)
+
+        sx = sx - IsoCamera.getOffX()-- - square:getOffsetX()
+        sy = sy - IsoCamera.getOffY()-- - square:getOffsetY()
+
+        sy = sy - marker.y_offset
+
+        local zoom = getCore():getZoom(0)
+        sx = sx / zoom
+        sy = sy / zoom
+        sy = sy - marker.nametag:getHeight()
+
+        marker.nametag:setDefaultColors(marker.r,marker.g,marker.b,marker.a)
+        marker.nametag:AddBatchedDraw(sx, sy, true)
+    end
+
+    -- local vector1 = Vector2.new(getPlayer():getX(), getPlayer():getY())
+	-- local vector2 = Vector2.new(getPlayer():getX()+3, getPlayer():getY()+3)
+	-- getPlayer():drawLine(vector1, vector2, 1, 0, 0,1)
+end
+
+CheckAround.OnRenderTick = function()
+    local player = getPlayer()
+    if not player then return end
+
+    DrawingLines = DrawingLines or {}
+    for _,line in pairs(DrawingLines) do
+        player:drawDirectionLine(line.vector, line.length,line.r,line.g,line.b)
+    end
+
+
 end
 
 --#endregion

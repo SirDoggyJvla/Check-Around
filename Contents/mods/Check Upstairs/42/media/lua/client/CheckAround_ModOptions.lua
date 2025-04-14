@@ -11,11 +11,6 @@ This file adds the custom keybinds.
 ]]--
 --[[ ================================================ ]]--
 
---- requirements
-local CheckAround = require "CheckAround_module"
-require "CheckAround"
-local ModOptions = PZAPI.ModOptions
-
 local options = PZAPI.ModOptions:create("CheckAround", "Check Around")
 options:addTitle("Check Around")
 options:addDescription("Check Around your surrondings for threats (windows, doors, stairs...)")
