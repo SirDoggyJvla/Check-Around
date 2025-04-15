@@ -13,22 +13,23 @@ Custom TimedAction to check behind doors.
 
 -- requirements
 require "TimedActions/ISBaseTimedAction"
-local FindersTools = require "DoggyTools/FindersTools"
+-- local FindersTools = require "DoggyTools/FindersTools"
+local RayCasting = require "DoggyTools/RayCasting"
 local CheckAround = require "CheckAround_module"
 local GENERAL_RANDOM = newrandom()
 
-ISCheckBehindDoor = ISBaseTimedAction:derive("ISCheckBehindDoor")
+ISCheckBehindObject = ISBaseTimedAction:derive("ISCheckBehindObject")
 
-function ISCheckBehindDoor:isValid()
+function ISCheckBehindObject:isValid()
 	return true
 end
 
-function ISCheckBehindDoor:waitToStart()
-	self.character:faceThisObject(self.door)
+function ISCheckBehindObject:waitToStart()
+	self.character:faceThisObject(self.object)
 	return self.character:shouldBeTurning()
 end
 
-function ISCheckBehindDoor:update()
+function ISCheckBehindObject:update()
     -- instance info
     local delta = self.action:getJobDelta()
     delta = delta * 100
@@ -36,54 +37,55 @@ function ISCheckBehindDoor:update()
     delta = delta / 100
     if delta == self.previousDelta then return end
 
-    local freshVector = Vector2.new(self.startBeam)
-    freshVector:rotate(delta * self.rotateDirection)
+    local beamVector = Vector2.new(self.startBeam)
+    beamVector:rotate(delta * self.rotateDirection)
 
-    local squares = FindersTools.CastVisionRay(self.pointOfCheck, freshVector, 10, self.ignoredObjects)
-    for square, wall in pairs(squares) do repeat
+    -- local squares = FindersTools.CastVisionRay(self.pointOfCheck, beamVector, 20, self.ignoredObjects)
+    local squares = RayCasting.CastRay2D(self.pointOfCheck, beamVector, self.ignoredObjects)
+    for square, _ in pairs(squares) do repeat
         -- if self.checkedSquares[square] then break end
 
         local movingObjects = square:getMovingObjects()
         for i=0, movingObjects:size()-1 do
             local zombie = movingObjects:get(i)
             if instanceof(zombie, "IsoZombie") then
+                self.zombies[zombie] = true
                 if self.showNametags then
                     CheckAround.ShowNametag(zombie)
                 end
             end
         end
-
-
-        if not wall then
-            CheckAround.AddHighlightSquare(square, {r=1,g=0,b=0,a=0.5},0)
-        else
-            self.checkedSquares[square] = true
-            CheckAround.AddHighlightSquare(square, {r=1,g=1,b=0,a=1}, 30)
-
-            -- local nametag = TextDrawObject.new()
-            -- nametag:ReadString(UIFont.Small, tostring(square), -1)
-
-            -- SquareNametags[square] = nametag
-        end
+        -- if wall == true then
+        --     CheckAround.AddHighlightSquare(square, {r=1,g=0,b=0,a=0.5},0)
+        -- else
+        --     self.checkedSquares[square] = true
+        --     CheckAround.AddHighlightSquare(square, {r=1,g=1,b=0,a=1}, 30)
+        -- end
     until true end
 end
 -- print(getPlayer():getX(), getPlayer():getY())
 
 AddHighlightSquare = CheckAround.AddHighlightSquare
 
-function ISCheckBehindDoor:start()
+function ISCheckBehindObject:start()
 	self:setActionAnim("Craft")
 
     -- instance info
     local character = self.character
-    local door = self.door
+    local object = self.object
+    self.zombies = {}
 
-    if instanceof(door, "IsoDoor") then
+    if instanceof(object, "IsoDoor") or instanceof(object, "IsoThumpable") and object:isDoor() then
         self:rollCreek()
+        self.voiceLine_noZombies = CheckAround.Voicelines_BehindDoorNoZombies
+        self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindDoor
+    elseif instanceof(object, "IsoWindow") or instanceof(object, "IsoThumpable") and object:isWindow() then
+        self.voiceLine_noZombies = CheckAround.Voicelines_BehindWindowsNoZombies
+        self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindWindow
     end
 
     -- get start beam and rotation direction
-    local door_north = door:getNorth()
+    local door_north = object:getNorth()
     if door_north then
         self.startBeam = Vector2.new(1,0)
         self.rotateDirection = -math.pi
@@ -91,13 +93,14 @@ function ISCheckBehindDoor:start()
         self.startBeam = Vector2.new(0,1)
         self.rotateDirection = math.pi
     end
+    self.startBeam:setLength(20)
 
-    -- retrieve various squares of the door
-    local square = door:getSquare()
-    local square_opposite = door:getOppositeSquare()
+    -- retrieve various squares of the object
+    local square = object:getSquare()
+    local square_opposite = object:getOppositeSquare()
     local square_door = square
 
-    -- inverse squares to find out which one is truly behind the door relative to the character
+    -- inverse squares to find out which one is truly behind the object relative to the character
     local square_character = character:getSquare()
     if square_character ~= square then
         square_door = square_opposite
@@ -117,16 +120,12 @@ function ISCheckBehindDoor:start()
         z = square_opposite:getZ(),
     }
 
-    SquareNametags = {}
-    CheckAround.highlightsSquares = {}
-    UniqueMarker = {}
-    DrawingLines = {}
-    CheckAround.AddHighlightSquare(square_door, {r=0,g=1,b=0,a=0.5}, 100)
-    CheckAround.AddHighlightSquare(square_opposite, {r=0,g=0,b=1,a=0.5}, 100)
+    -- CheckAround.AddHighlightSquare(square_door, {r=0,g=1,b=0,a=0.5}, 100)
+    -- CheckAround.AddHighlightSquare(square_opposite, {r=0,g=0,b=1,a=0.5}, 100)
 end
 
-function ISCheckBehindDoor:rollCreek()
-    local door = self.door
+function ISCheckBehindObject:rollCreek()
+    local object = self.object
     local character = self.character
 
     -- get character stats
@@ -145,8 +144,8 @@ function ISCheckBehindDoor:rollCreek()
     local stress = stats:getStress()*100/2
     local pain = stats:getPain()/2
 
-    -- get default value for success chance which is normalized door health
-    local doorHealth = door:getHealth()/door:getMaxHealth() * 100
+    -- get default value for success chance which is normalized object health
+    local doorHealth = object:getHealth()/object:getMaxHealth() * 100
 
     -- calculate success chance
     local successChance = doorHealth + Lightfoot + Nimble + Sneak + Graceful + Inconspicuous + Crouching - Conspicuous - Clumsy - panic - stress - pain
@@ -154,7 +153,7 @@ function ISCheckBehindDoor:rollCreek()
     -- if not success, play a sound
     local success = successChance >= GENERAL_RANDOM:random(0,100)
     if not success then
-        local square = door:getSquare()
+        local square = object:getSquare()
         getWorld():getFreeEmitter():playSoundImpl("DoorCreek",square)
         local radius = SandboxVars.CheckAround.Radius + 1
         addSound(nil, square:getX(), square:getY(), square:getZ(), radius, radius)
@@ -162,22 +161,24 @@ function ISCheckBehindDoor:rollCreek()
     end
 end
 
-function ISCheckBehindDoor:stop()
+function ISCheckBehindObject:stop()
 	ISBaseTimedAction.stop(self);
 end
 
-function ISCheckBehindDoor:perform()
-    local square_door = self.square_door
-    local character = self.character
+function ISCheckBehindObject:perform()
+    local zombieCount = 0
+    for _, _ in pairs(self.zombies) do
+        zombieCount = zombieCount + 1
+    end
 
     -- retrieve zombies in radius
-
+    CheckAround.ApplyVoiceline(self.character,zombieCount,self.voiceLine_noZombies,self.voiceLine_zombies)
 
     -- needed to remove from queue / start next.
 	ISBaseTimedAction.perform(self)
 end
 
-function ISCheckBehindDoor:new(character, door)
+function ISCheckBehindObject:new(character, object)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -186,17 +187,22 @@ function ISCheckBehindDoor:new(character, door)
 	o.stopOnRun = true
 	o.maxTime = 200
 
+    SquareNametags = {}
+    CheckAround.highlightsSquares = {}
+    UniqueMarker = {}
+    DrawingLines = {}
+
 	-- custom fields
-    o.door = door
+    o.object = object
 
     o.previousDelta = -1
     o.checkedSquares = {}
     o.showNametags = SandboxVars.CheckAround.ShowZombieNametag
     o.ignoredObjects = {
-        [door] = true,
+        [object] = true,
     }
 
 	return o
 end
 
-return ISCheckBehindDoor
+return ISCheckBehindObject

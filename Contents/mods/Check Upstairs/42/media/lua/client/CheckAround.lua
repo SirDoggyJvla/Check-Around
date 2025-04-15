@@ -15,7 +15,7 @@ This file handles the mod CheckAround and adds the custom keybinds.
 local CheckAround = require "CheckAround_module"
 require "CheckAround_patches"
 local CheckAround_Options = require "CheckAround_ModOptions"
--- local ISCheckBehindDoor = require "CheckAroundTimedActions/ISCheckBehindDoor"
+-- local ISCheckBehindObject = require "CheckAroundTimedActions/ISCheckBehindObject"
 local FindersTools = require "DoggyTools/FindersTools"
 
 CheckAround.UpdateZombieName = function()
@@ -31,12 +31,10 @@ end
 
 -- Apply the voiceline based on the amount of `zombies` and the given voicelines.
 ---@param player IsoPlayer
----@param zombies table
+---@param zombiesAmount integer
 ---@param voicelines_noZombies table
 ---@param voicelines_zombies table
-CheckAround.applyVoiceline = function(player,zombies,voicelines_noZombies,voicelines_zombies)
-    local zombiesAmount = #zombies
-
+CheckAround.ApplyVoiceline = function(player,zombiesAmount,voicelines_noZombies,voicelines_zombies)
     if zombiesAmount > 0 then
         local voiceLine = voicelines_zombies[ZombRand(1,#voicelines_zombies+1)]
         if zombiesAmount == 1 then
@@ -44,15 +42,17 @@ CheckAround.applyVoiceline = function(player,zombies,voicelines_noZombies,voicel
         else
             player:Say(string.format(voiceLine,zombiesAmount,CheckAround.ZombiesName))
         end
-
-        if SandboxVars.CheckAround.ShowZombieNametag then
-            for _,zombie in ipairs(zombies) do
-                CheckAround.ShowNametag(zombie)
-            end
-        end
     else
         local voiceLine = voicelines_noZombies[ZombRand(1,#voicelines_noZombies+1)]
         player:Say(string.format(voiceLine,CheckAround.ZombieName))
+    end
+end
+
+CheckAround.ShowZombiesNametags = function(zombies)
+    if SandboxVars.CheckAround.ShowZombieNametag then
+        for i = 1,#zombies do
+            CheckAround.ShowNametag(zombies[i])
+        end
     end
 end
 
@@ -171,7 +171,8 @@ CheckAround.checkForZombies_upstairs = function(player)
     local topCoordinates = CheckAround.getStairTopCoordinates(player)
     if topCoordinates then
         local zombies = FindersTools.getZombiesInRadius(player,topCoordinates,SandboxVars.CheckAround.Radius)
-        CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_CheckAroundNoZombies,CheckAround.Voicelines_zombieUpstairs)
+        CheckAround.ApplyVoiceline(player,#zombies,CheckAround.Voicelines_CheckAroundNoZombies,CheckAround.Voicelines_zombieUpstairs)
+        CheckAround.ShowZombiesNametags(zombies)
     end
 end
 
@@ -180,7 +181,8 @@ CheckAround.checkForZombies_downstairs = function(player)
     local bottomCoordinates = CheckAround.getStairBottomCoordinates(player)
     if bottomCoordinates then
         local zombies = FindersTools.getZombiesInRadius(player,bottomCoordinates,SandboxVars.CheckAround.Radius)
-        CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_CheckDownstairsNoZombies,CheckAround.Voicelines_zombieDownstairs)
+        CheckAround.ApplyVoiceline(player,#zombies,CheckAround.Voicelines_CheckDownstairsNoZombies,CheckAround.Voicelines_zombieDownstairs)
+        CheckAround.ShowZombiesNametags(zombies)
     end
 end
 
@@ -230,10 +232,10 @@ CheckAround.CheckWindow = function(_, playerIndex, window)
 
     -- retrieve zombies in radius
     local zombies = FindersTools.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()},SandboxVars.CheckAround.Radius)
-    CheckAround.applyVoiceline(player,zombies,CheckAround.Voicelines_BehindWindowsNoZombies,CheckAround.Voicelines_zombiesBehindWindow)
+    CheckAround.ApplyVoiceline(player,#zombies,CheckAround.Voicelines_BehindWindowsNoZombies,CheckAround.Voicelines_zombiesBehindWindow)
 
     if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, window) then
-        ISTimedActionQueue.add(ISCheckBehindDoor:new(player, window))
+        ISTimedActionQueue.add(ISCheckBehindObject:new(player, window))
     end
 end
 
@@ -250,40 +252,8 @@ CheckAround.CheckDoor = function(player, door)
     local y_square = square:getY()
 
     if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, door) then
-        ISTimedActionQueue.add(ISCheckBehindDoor:new(player, door))
+        ISTimedActionQueue.add(ISCheckBehindObject:new(player, door))
     end
-end
-
--- Checks for zombies behind the window.
----@param player IsoPlayer
----@param door IsoThumpable|IsoDoor
-CheckAround.PeekDoor = function(player, door)
-    -- get player stats
-    local Lightfoot = player:getPerkLevel(Perks.Lightfoot)
-    local Nimble = player:getPerkLevel(Perks.Nimble)
-    local Sneak = player:getPerkLevel(Perks.Sneak)
-    local Graceful = player:HasTrait("Graceful") and 10 or 0
-    local Inconspicuous = player:HasTrait("Inconspicuous") and 10 or 0
-    local Conspicuous = player:HasTrait("Conspicuous") and 10 or 0
-    local Clumsy = player:HasTrait("Clumsy") and 10 or 0
-
-    -- get default value for success chance which is normalized door health
-    local doorHealth = door:getHealth()/door:getMaxHealth() * 100
-
-    -- calculate success chance
-    local successChance = doorHealth + Lightfoot + Nimble + Sneak + Graceful + Inconspicuous - Conspicuous - Clumsy
-
-    -- if not success, play a sound
-    local success = successChance <= 0 or successChance >= 100 or successChance >= ZombRand(100)
-    if not success then
-        local emitter = getWorld():getFreeEmitter()
-        local square = door:getSquare()
-        emitter:playSoundImpl("DoorCreek"..tostring(ZombRand(1,16)),square)
-        local radius = SandboxVars.CheckAround.Radius + 1
-        addSound(nil, square:getX(), square:getY(), square:getZ(), radius, radius)
-    end
-
-    CheckAround.CheckDoor(player, door)
 end
 
 -- Retrieve informations of `object`, an `IsoThumpable`:
