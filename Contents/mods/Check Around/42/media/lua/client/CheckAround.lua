@@ -200,42 +200,15 @@ end
 
 --#region Check for zombies window and doors
 
--- Checks for zombies behind the window.
----@param _ any
----@param playerIndex integer
----@param window IsoThumpable|IsoWindow
-CheckAround.CheckWindow = function(_, playerIndex, window)
-    local square = window:getSquare()
 
-    local player = getSpecificPlayer(playerIndex)
-    if not player then return end
+---Look through window or door for zombies
+---@param player IsoPlayer
+---@param object IsoThumpable|IsoWindow|IsoDoor
+CheckAround.CheckWindowOrDoor = function(player, object)
+    local square = object:getSquare()
 
-    local x = player:getX()
-    local y = player:getY()
-
-    local x_square = square:getX()
-    local y_square = square:getY()
-
-    local square_opposite = window:getOppositeSquare()
-
-    local north = window:getNorth()
-    local square_check = square
-    if north then
-        if math.floor(y) == y_square then
-            square_check = square_opposite
-        end
-    else
-        if math.floor(x) == x_square then
-            square_check = square_opposite
-        end
-    end
-
-    -- retrieve zombies in radius
-    local zombies = FindersTools.getZombiesInRadius(player,{x = square_check:getX(),y = square_check:getY(),z = square_check:getZ()},SandboxVars.CheckAround.Radius)
-    CheckAround.ApplyVoiceline(player,#zombies,CheckAround.Voicelines_BehindWindowsNoZombies,CheckAround.Voicelines_zombiesBehindWindow)
-
-    if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, window) then
-        ISTimedActionQueue.add(ISCheckBehindObject:new(player, window))
+    if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, object) then
+        ISTimedActionQueue.add(ISCheckBehindObject:new(player, object))
     end
 end
 
@@ -244,12 +217,6 @@ end
 ---@param door IsoThumpable|IsoDoor
 CheckAround.CheckDoor = function(player, door)
     local square = door:getSquare()
-
-    local x = player:getX()
-    local y = player:getY()
-
-    local x_square = square:getX()
-    local y_square = square:getY()
 
     if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, door) then
         ISTimedActionQueue.add(ISCheckBehindObject:new(player, door))
@@ -438,25 +405,11 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
         -- object is window
         if isWindow then
             -- add new option to check behind window
-            local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), objects, CheckAround.CheckWindow, playerIndex, object)
+            local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), player, CheckAround.CheckWindowOrDoor, object)
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
-            -- check distance from window or door
-            local square = object:getSquare()
-            local dist = IsoUtils.DistanceTo(
-                square:getX(),square:getY(),square:getZ(),
-                player:getX(),player:getY(),player:getZ()
-            )
-
-            -- window is too far to check through
-            if dist > 1.5 then
-                option.notAvailable = true
-                local tooltip = ISWorldObjectContextMenu.addToolTip()
-                tooltip.description = getText("Tooltip_CantCheckThroughWindow_tooFar")
-                option.toolTip = tooltip
-
             -- curtains are blocking vision
-            elseif hasCurtainClosed then
+            if hasCurtainClosed then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughWindow_curtain")
@@ -475,26 +428,19 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
 
         -- object is door
         elseif isDoor then
-            -- check distance from window or door
-            local square = object:getSquare()
-            local dist = IsoUtils.DistanceTo(
-                square:getX(),square:getY(),square:getZ(),
-                player:getX(),player:getY(),player:getZ()
-            )
-
             -- add new option to check behind door or peek it if not open
-            local option = context:addOption(getText("ContextMenu_CheckBehindDoor"), player, CheckAround.CheckDoor, object)
+            local option = context:addOption(getText("ContextMenu_CheckBehindDoor"), player, CheckAround.CheckWindowOrDoor, object)
+            option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
+
+            -- verify open
             if not isOpen then
                 option.name = getText("ContextMenu_PeekDoor")
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_PeekBehindDoor")
                 option.toolTip = tooltip
-            end
-
-            option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
             -- barricaded means we can't peek it
-            if isBarricaded then
+            elseif isBarricaded then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughDoor_barricaded")

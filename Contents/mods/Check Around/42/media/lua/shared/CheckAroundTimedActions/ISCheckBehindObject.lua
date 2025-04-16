@@ -68,7 +68,8 @@ end
 AddHighlightSquare = CheckAround.AddHighlightSquare
 
 function ISCheckBehindObject:start()
-	self:setActionAnim("Craft")
+	self:setActionAnim("Welding")
+    self:setOverrideHandModelsString(nil,nil)
 
     -- instance info
     local character = self.character
