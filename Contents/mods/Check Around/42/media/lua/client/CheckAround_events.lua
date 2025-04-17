@@ -24,9 +24,3 @@ Events.OnKeyPressed.Add(CheckAround.KeyPress)
 
 -- check context menu
 Events.OnFillWorldObjectContextMenu.Add(CheckAround.OnFillWorldObjectContextMenu)
-
-if isDebugEnabled() then
-    -- render debug highlight squares
-    Events.OnPostRender.Add(CheckAround.RenderHighLights)
-    Events.OnPostRender.Add(CheckAround.OnRenderTick)
-end

@@ -17,6 +17,7 @@ require "CheckAround_patches"
 local CheckAround_Options = require "CheckAround_ModOptions"
 -- local ISCheckBehindObject = require "CheckAroundTimedActions/ISCheckBehindObject"
 local FindersTools = require "DoggyTools/FindersTools"
+local GENERAL_RANDOM = newrandom()
 
 CheckAround.UpdateZombieName = function()
     CheckAround.ZombieName = SandboxVars.CheckAround.loreNameSingular ~= "" and SandboxVars.CheckAround.loreNameSingular or CheckAround.defaultZombieName
@@ -36,14 +37,14 @@ end
 ---@param voicelines_zombies table
 CheckAround.ApplyVoiceline = function(player,zombiesAmount,voicelines_noZombies,voicelines_zombies)
     if zombiesAmount > 0 then
-        local voiceLine = voicelines_zombies[ZombRand(1,#voicelines_zombies+1)]
+        local voiceLine = voicelines_zombies[GENERAL_RANDOM:random(1,#voicelines_zombies)]
         if zombiesAmount == 1 then
             player:Say(string.format(voiceLine,zombiesAmount,CheckAround.ZombieName))
         else
             player:Say(string.format(voiceLine,zombiesAmount,CheckAround.ZombiesName))
         end
     else
-        local voiceLine = voicelines_noZombies[ZombRand(1,#voicelines_noZombies+1)]
+        local voiceLine = voicelines_noZombies[GENERAL_RANDOM:random(1,#voicelines_noZombies)]
         player:Say(string.format(voiceLine,CheckAround.ZombieName))
     end
 end
@@ -209,17 +210,6 @@ CheckAround.CheckWindowOrDoor = function(player, object)
 
     if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, object) then
         ISTimedActionQueue.add(ISCheckBehindObject:new(player, object))
-    end
-end
-
--- Checks for zombies behind the window.
----@param player IsoPlayer
----@param door IsoThumpable|IsoDoor
-CheckAround.CheckDoor = function(player, door)
-    local square = door:getSquare()
-
-    if not player:isBlockMovement() and luautils.walkAdjWindowOrDoor(player, square, door) then
-        ISTimedActionQueue.add(ISCheckBehindObject:new(player, door))
     end
 end
 
@@ -408,15 +398,8 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
             local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), player, CheckAround.CheckWindowOrDoor, object)
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
-            -- curtains are blocking vision
-            if hasCurtainClosed then
-                option.notAvailable = true
-                local tooltip = ISWorldObjectContextMenu.addToolTip()
-                tooltip.description = getText("Tooltip_CantCheckThroughWindow_curtain")
-                option.toolTip = tooltip
-
             -- window needs to be open to peek through
-            elseif not isOpen then
+            if not isOpen then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughWindow_notOpen")
@@ -510,7 +493,7 @@ CheckAround.ShowNametag = function(zombie)
 end
 
 -- Update visuals of zombies, their nametags
-CheckAround.HandleVisuals = function(ticks)
+CheckAround.HandleVisuals = function(_)
     local zombieList = getCell():getZombieList()
 
     for i = 0, zombieList:size() - 1 do repeat
@@ -532,58 +515,6 @@ CheckAround.HandleVisuals = function(ticks)
             zombieModData.CheckAround_nametag = nil
         end
     until true end
-
-    SquareNametags = SquareNametags or {}
-    for square, nametag in pairs(SquareNametags) do
-        local sx = IsoUtils.XToScreen(square:getX()+0.5, square:getY()+0.5, square:getZ(), 0)
-        local sy = IsoUtils.YToScreen(square:getX()+0.5, square:getY()+0.5, square:getZ(), 0)
-
-        sx = sx - IsoCamera.getOffX()-- - square:getOffsetX()
-        sy = sy - IsoCamera.getOffY()-- - square:getOffsetY()
-
-        local zoom = getCore():getZoom(0)
-        sx = sx / zoom
-        sy = sy / zoom
-        sy = sy - nametag:getHeight()
-
-        nametag:setDefaultColors(1,1,1,1)
-        nametag:AddBatchedDraw(sx, sy, true)
-    end
-
-    UniqueMarker = UniqueMarker or {}
-    for _,marker in pairs(UniqueMarker) do
-        local sx = IsoUtils.XToScreen(marker.x, marker.y, marker.z, 0)
-        local sy = IsoUtils.YToScreen(marker.x, marker.y, marker.z, 0)
-
-        sx = sx - IsoCamera.getOffX()-- - square:getOffsetX()
-        sy = sy - IsoCamera.getOffY()-- - square:getOffsetY()
-
-        sy = sy - marker.y_offset
-
-        local zoom = getCore():getZoom(0)
-        sx = sx / zoom
-        sy = sy / zoom
-        sy = sy - marker.nametag:getHeight()
-
-        marker.nametag:setDefaultColors(marker.r,marker.g,marker.b,marker.a)
-        marker.nametag:AddBatchedDraw(sx, sy, true)
-    end
-
-    -- local vector1 = Vector2.new(getPlayer():getX(), getPlayer():getY())
-	-- local vector2 = Vector2.new(getPlayer():getX()+3, getPlayer():getY()+3)
-	-- getPlayer():drawLine(vector1, vector2, 1, 0, 0,1)
-end
-
-CheckAround.OnRenderTick = function()
-    local player = getPlayer()
-    if not player then return end
-
-    DrawingLines = DrawingLines or {}
-    for _,line in pairs(DrawingLines) do
-        player:drawDirectionLine(line.vector, line.length,line.r,line.g,line.b)
-    end
-
-
 end
 
 --#endregion

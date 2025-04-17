@@ -77,7 +77,9 @@ function ISCheckBehindObject:start()
     self.zombies = {}
 
     if instanceof(object, "IsoDoor") or instanceof(object, "IsoThumpable") and object:isDoor() then
-        self:rollCreek()
+        if not object:IsOpen() then
+            self:rollCreek()
+        end
         self.voiceLine_noZombies = CheckAround.Voicelines_BehindDoorNoZombies
         self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindDoor
     elseif instanceof(object, "IsoWindow") or instanceof(object, "IsoThumpable") and object:isWindow() then
@@ -120,9 +122,6 @@ function ISCheckBehindObject:start()
         y = square_opposite:getY() + 0.5 - playerVector:getY() * 0.4,
         z = square_opposite:getZ(),
     }
-
-    -- CheckAround.AddHighlightSquare(square_door, {r=0,g=1,b=0,a=0.5}, 100)
-    -- CheckAround.AddHighlightSquare(square_opposite, {r=0,g=0,b=1,a=0.5}, 100)
 end
 
 function ISCheckBehindObject:rollCreek()
@@ -167,6 +166,7 @@ function ISCheckBehindObject:stop()
 end
 
 function ISCheckBehindObject:perform()
+    -- count zombies
     local zombieCount = 0
     for _, _ in pairs(self.zombies) do
         zombieCount = zombieCount + 1
@@ -184,7 +184,7 @@ function ISCheckBehindObject:new(character, object)
 	setmetatable(o, self)
 	self.__index = self
 	o.character = character
-	o.stopOnWalk = false
+	o.stopOnWalk = true
 	o.stopOnRun = true
 	o.maxTime = 200
 

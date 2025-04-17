@@ -163,36 +163,4 @@ local CheckAround = {
     },
 }
 
---#region Debug functions to highlight squares
--- Code by Rodriguo
-
-if isDebugEnabled() then
-    local enabled = true
-
-    CheckAround.AddHighlightSquare = function(square, ISColors, priority)
-        if not square or not ISColors then return end
-        local existingSquare = CheckAround.highlightsSquares[square]
-        if existingSquare and existingSquare.priority >= priority then return end
-
-        CheckAround.highlightsSquares[square] = {color = ISColors, priority = priority}
-    end
-
-    CheckAround.RenderHighLights = function()
-        if not enabled then return end
-
-        -- if #CheckAround.highlightsSquares == 0 then return end
-        for square, highlight in pairs(CheckAround.highlightsSquares) do
-            local x,y,z = square:getX(), square:getY(), square:getZ()
-            local color = highlight.color
-            local r,g,b,a = color.r, color.g, color.b, color.a
-
-            local floorSprite = IsoSprite.new()
-            floorSprite:LoadFramesNoDirPageSimple('media/ui/FloorTileCursor.png')
-            floorSprite:RenderGhostTileColor(x, y, z, r, g, b, a)
-        end
-    end
-end
-
---#endregion
-
 return CheckAround
