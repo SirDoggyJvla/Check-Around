@@ -40,7 +40,6 @@ function ISCheckBehindObject:update()
     local beamVector = Vector2.new(self.startBeam)
     beamVector:rotate(delta * self.rotateDirection)
 
-    -- local squares = FindersTools.CastVisionRay(self.pointOfCheck, beamVector, 20, self.ignoredObjects)
     local squares = RayCasting.CastRay2D(self.pointOfCheck, beamVector, self.ignoredObjects)
     for square, _ in pairs(squares) do repeat
         -- if self.checkedSquares[square] then break end
