@@ -13,8 +13,7 @@ Custom TimedAction to check behind doors.
 
 -- requirements
 require "TimedActions/ISBaseTimedAction"
--- local FindersTools = require "DoggyTools/FindersTools"
-local RayCasting = require "DoggyTools/RayCasting"
+local RayBeam2D = require "DoggyObjects/RayBeam2D"
 local CheckAround = require "CheckAround_module"
 local GENERAL_RANDOM = newrandom()
 
@@ -38,12 +37,17 @@ function ISCheckBehindObject:update()
     if delta == self.previousDelta then return end
 
     local beamVector = Vector2.new(self.startBeam)
+    -- beamVector:setDirection(self.a*delta)
+
+
     beamVector:rotate(delta * self.rotateDirection)
 
-    local squares = RayCasting.CastRay2D(self.pointOfCheck, beamVector, self.ignoredObjects)
-    for square, _ in pairs(squares) do repeat
-        -- if self.checkedSquares[square] then break end
+    local beamObject = self.beamObject
+    beamObject:setBeam(beamVector)
 
+    local squares  = beamObject:castRay()
+
+    for square, _ in pairs(squares) do repeat
         local movingObjects = square:getMovingObjects()
         for i=0, movingObjects:size()-1 do
             local zombie = movingObjects:get(i)
@@ -54,27 +58,10 @@ function ISCheckBehindObject:update()
                 end
             end
         end
-        -- if wall == true then
-        --     CheckAround.AddHighlightSquare(square, {r=1,g=0,b=0,a=0.5},0)
-        -- else
-        --     self.checkedSquares[square] = true
-        --     CheckAround.AddHighlightSquare(square, {r=1,g=1,b=0,a=1}, 30)
-        -- end
     until true end
 end
--- print(getPlayer():getX(), getPlayer():getY())
 
-AddHighlightSquare = CheckAround.AddHighlightSquare
-
-function ISCheckBehindObject:start()
-	self:setActionAnim("Welding")
-    self:setOverrideHandModelsString(nil,nil)
-
-    -- instance info
-    local character = self.character
-    local object = self.object
-    self.zombies = {}
-
+function ISCheckBehindObject:setVoicelines(object)
     if instanceof(object, "IsoDoor") or instanceof(object, "IsoThumpable") and object:isDoor() then
         if not object:IsOpen() then
             self:rollCreek()
@@ -85,42 +72,90 @@ function ISCheckBehindObject:start()
         self.voiceLine_noZombies = CheckAround.Voicelines_BehindWindowsNoZombies
         self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindWindow
     end
+end
 
-    -- get start beam and rotation direction
+function ISCheckBehindObject:setStartingBeam(object)
+    local fovAngle = self.fovAngle
+    local gamma = fovAngle / 2
+    local beta = math.pi/2 - gamma
+
+    print(fovAngle)
     local door_north = object:getNorth()
     if door_north then
         self.startBeam = Vector2.new(1,0)
         self.rotateDirection = -math.pi
+        print("door_north")
+        print(self.startBeam:getDirection())
     else
         self.startBeam = Vector2.new(0,1)
         self.rotateDirection = math.pi
+        print("door_south")
+        print(self.startBeam:getDirection())
     end
+
+    local dir = self.startBeam:getDirection()
+    print(dir)
+
+    -- self.startBeam:setDirection(dir + beta)
+
+    -- self.startBeam:rotate(beta*self.rotateDirection)
+
     self.startBeam:setLength(20)
+
+    self.a = self.startBeam:getDirection() + fovAngle * self.rotateDirection
+    print(self.a)
+
+    -- self.endAngle = self.startBeam:getDirection() + fovAngle
+end
+
+function ISCheckBehindObject:setSquares()
+    local character = self.character
+    local object = self.object
 
     -- retrieve various squares of the object
     local square = object:getSquare()
     local square_opposite = object:getOppositeSquare()
     local square_door = square
 
-    -- inverse squares to find out which one is truly behind the object relative to the character
     local square_character = character:getSquare()
     if square_character ~= square then
         square_door = square_opposite
         square_opposite = square
 
-        self.rotateDirection = -self.rotateDirection
+        self.rotateDirection = -self.rotateDirection -- inverse rotation
     end
 
     self.square_opposite = square_opposite
     self.square_door = square_door
+end
+
+function ISCheckBehindObject:start()
+	self:setActionAnim("Welding")
+    self:setOverrideHandModelsString(nil,nil)
+
+    -- instance info
+    local character = self.character
+    local object = self.object
+
+    -- retrieve voicelines
+    self:setVoicelines(object)
+
+    -- inverse squares to find out which one is truly behind the object relative to the character
+    self:setSquares()
+    local square_opposite = self.square_opposite
+
+    -- get start beam and rotation direction
+    self:setStartingBeam(object)
 
     -- center point of beam rotation
     local playerVector = character:getForwardDirection()
-    self.pointOfCheck = {
+    local pointOfCheck = {
         x = square_opposite:getX() + 0.5 - playerVector:getX() * 0.4,
         y = square_opposite:getY() + 0.5 - playerVector:getY() * 0.4,
         z = square_opposite:getZ(),
     }
+
+    self.beamObject = RayBeam2D:new(pointOfCheck, Vector2.new(self.startBeam), self.ignoredObjects)
 end
 
 function ISCheckBehindObject:rollCreek()
@@ -178,7 +213,7 @@ function ISCheckBehindObject:perform()
 	ISBaseTimedAction.perform(self)
 end
 
-function ISCheckBehindObject:new(character, object)
+function ISCheckBehindObject:new(character, object, _fovAngle)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -187,15 +222,14 @@ function ISCheckBehindObject:new(character, object)
 	o.stopOnRun = true
 	o.maxTime = 200
 
-    SquareNametags = {}
-    CheckAround.highlightsSquares = {}
-    UniqueMarker = {}
-    DrawingLines = {}
-
 	-- custom fields
     o.object = object
+    o.zombies = {}
+    local _fovAngle = _fovAngle or 120
+    o.fovAngle = math.rad(_fovAngle)
 
     o.previousDelta = -1
+    o.rotateDirection = 1
     o.checkedSquares = {}
     o.showNametags = SandboxVars.CheckAround.ShowZombieNametag
     o.ignoredObjects = {
