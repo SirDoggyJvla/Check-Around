@@ -1,0 +1,14 @@
+[ ALERT_CONFIG ]
+link1 = Chuck's Kofi = https://steamcommunity.com/linkfilter/?u=https://ko-fi.com/sirdoggyjvla,
+link2 = Workshop = https://steamcommunity.com/id/jvladeya/myworkshopfiles/?appid=108600,
+link3 = Github = https://steamcommunity.com/linkfilter/?u=https://github.com/SirDoggyJvla,
+[ ------ ]
+
+[ 04/22/25 ]
+- New keybinds added.
+- Translation entries for checking stairs, windows and doors.
+- Now supports Mod Update and Alert System
+- Code cleanup
+- Takes into account the last changes to my API
+- You can't check behind doorframes anymore (not really needed)
+[ ------ ]

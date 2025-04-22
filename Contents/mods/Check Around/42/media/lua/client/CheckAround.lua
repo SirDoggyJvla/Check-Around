@@ -17,6 +17,7 @@ require "CheckAround_patches"
 local CheckAround_Options = require "CheckAround_ModOptions"
 -- local ISCheckBehindObject = require "CheckAroundTimedActions/ISCheckBehindObject"
 local FindersTools = require "DoggyTools/FindersTools"
+local WorldTools = require "DoggyTools/WorldTools"
 local GENERAL_RANDOM = newrandom()
 
 CheckAround.UpdateZombieName = function()
@@ -24,9 +25,47 @@ CheckAround.UpdateZombieName = function()
     CheckAround.ZombiesName = SandboxVars.CheckAround.loreNamePlurial ~= "" and SandboxVars.CheckAround.loreNamePlurial or CheckAround.defaultZombiesName
 end
 
+CheckAround.GetValidDoorWindow = function(square)
+    local isValid
+
+    local square, object = WorldTools.HasWindowOrDoor(square)
+    if object then
+        if WorldTools.IsWindow(object) then
+            local isBarricaded
+            -- check for barricades
+            local barricade1 = object:getBarricadeOnSameSquare()
+            local barricade2 = object:getBarricadeOnOppositeSquare()
+            if barricade1 and barricade1:isBlockVision() or barricade2 and barricade2:isBlockVision() then
+                isBarricaded = true
+            end
+
+            -- check for curtains
+            local curtains = object:HasCurtains() ---@as IsoCurtain
+            local isOpen = not curtains or curtains:IsOpen()
+            isValid = isOpen and not isBarricaded
+        elseif WorldTools.IsDoor(object) then
+            local isBarricaded = object:isBarricaded()
+            isValid = not isBarricaded
+        end
+    end
+
+    return isValid
+end
+
 CheckAround.KeyPress = function(keynum)
     if keynum == CheckAround_Options.CheckUpstairs:getValue() then
         CheckAround.checkForZombies()
+    end
+    if keynum == CheckAround_Options.CheckDoorWindow:getValue() then
+        local player = getPlayer()
+        local z = player:getZ()
+
+        local square = FindersTools.FindNearestValidSquare(player:getX(), player:getY(), 0, 1, z, z, FindersTools.CIRCULAR_OUTWARD_DIRECTIONS, CheckAround.GetValidDoorWindow)
+
+        if square then
+            local _, object = WorldTools.HasWindowOrDoor(square)
+            CheckAround.CheckWindowOrDoor(player, object)
+        end
     end
 end
 
@@ -213,169 +252,6 @@ CheckAround.CheckWindowOrDoor = function(player, object)
     end
 end
 
--- Retrieve informations of `object`, an `IsoThumpable`:
--- - `isWindow`
--- - `isOpen`
--- - `hasCurtainClosed`
--- - `isDoor`
----@param object IsoThumpable
----@return boolean|nil -- isWindow
----@return boolean|nil -- isOpen
----@return boolean|nil -- hasCurtainClosed
----@return boolean|nil -- isDoor
----@return boolean|nil -- isBarricaded (for doors)
-CheckAround.GetIsoThumpableInformations = function(object)
-    local isWindow
-    local isOpen
-    local hasCurtainClosed
-    local isDoor
-    local isBarricaded = object:isBarricaded()
-
-    local isDoorFrame = object:isDoorFrame()
-
-    -- to iterate through objects on the same square
-    local objects
-    local getObject
-
-    -- object is a window
-    if object:isWindow() then
-        isWindow = true
-        isOpen = true
-
-        -- check if window is on IsoThumpable and check for that window stats instead
-        objects = object:getSquare():getObjects()
-        for i = 0, objects:size() - 1 do
-            getObject = objects:get(i)
-            if instanceof(getObject,"IsoWindow") and getObject:getNorth() == object:getNorth() then
-                return CheckAround.GetIsoWindowInformations(getObject)
-            end
-        end
-
-        -- check for curtains
-        local curtains = object:HasCurtains()
-        hasCurtainClosed = curtains and not curtains:IsOpen()
-
-        -- check for barricades to make sure window is open
-        if isBarricaded then
-            local barricades = object:getBarricadeOnSameSquare()
-            local blockVision = barricades and barricades:isBlockVision()
-
-            if blockVision then
-                isOpen = false
-            else
-                barricades = object:getBarricadeOnOppositeSquare()
-                if barricades and barricades:isBlockVision() then
-                    isOpen = false
-                end
-            end
-        end
-
-    -- object is a door
-    elseif object:isDoor() or isDoorFrame then
-        isDoor = true
-        isOpen = object:IsOpen() or object:isDestroyed() or isDoorFrame
-
-        -- check if door is on IsoThumpable and check for that door stats instead
-        objects = object:getSquare():getObjects()
-        for i = 0, objects:size() - 1 do
-            getObject = objects:get(i)
-            if instanceof(getObject,"IsoDoor") and getObject:getNorth() == object:getNorth() then
-                return CheckAround.GetIsoDoorInformations(getObject)
-            elseif instanceof(getObject,"IsoThumpable") and getObject:getNorth() == object:getNorth() then
-                if getObject:isDoor() then
-                    return CheckAround.GetIsoDoorInformations(getObject)
-                end
-            end
-        end
-    end
-
-    return isWindow, isOpen, hasCurtainClosed, isDoor, isBarricaded
-end
-
--- Retrieve informations of `object`, an `IsoDoor`:
--- - `isWindow`
--- - `isOpen`
--- - `hasCurtainClosed`
--- - `isDoor`
----@param object IsoWindow
----@return nil -- not a window
----@return boolean|nil -- isOpen
----@return nil -- don't care about curtains
----@return boolean|nil -- isDoor
----@return boolean|nil -- isBarricaded (for doors)
-CheckAround.GetIsoDoorInformations = function(object)
-    local isDoor = true
-    local isOpen = object:IsOpen() or object:isDestroyed()
-    local isBarricaded = object:isBarricaded()
-
-    return nil, isOpen, nil, isDoor, isBarricaded
-end
-
--- Retrieve informations of `object`, an `IsoWindow`:
--- - `isWindow`
--- - `isOpen`
--- - `hasCurtainClosed`
--- - `isDoor`
----@param object IsoWindow
----@return boolean|nil -- isWindow
----@return boolean|nil -- isOpen
----@return boolean|nil -- hasCurtainClosed
----@return nil -- not a door
----@return boolean|nil -- isBarricaded (for doors)
-CheckAround.GetIsoWindowInformations = function(object)
-    local isWindow = true
-    local isOpen = object:IsOpen() or object:isDestroyed()
-    local hasCurtainClosed
-    local isBarricaded = object:isBarricaded()
-
-    local curtains = object:HasCurtains()
-    hasCurtainClosed = curtains and not curtains:IsOpen()
-
-    -- check for barricades to make sure window is open
-    if isOpen and isBarricaded then
-        local barricades = object:getBarricadeOnSameSquare()
-        local blockVision = barricades and barricades:isBlockVision()
-
-        if blockVision then
-            isOpen = false
-        else
-            barricades = object:getBarricadeOnOppositeSquare()
-            if barricades and barricades:isBlockVision() then
-                isOpen = false
-            end
-        end
-    end
-
-    return isWindow, isOpen, hasCurtainClosed, nil, isBarricaded
-end
-
--- Check if `object` is a window and it's various states.
----@param object any
----@return boolean|nil -- isWindow
----@return boolean|nil -- isOpen
----@return boolean|nil -- hasCurtainClosed
----@return boolean|nil -- isDoor
----@return boolean|nil -- isBarricaded (for doors)
-CheckAround.IsWindowOrDoor = function(object)
-    if instanceof(object,"IsoWindow") then
-        return CheckAround.GetIsoWindowInformations(object)
-    elseif instanceof(object,"IsoDoor") then
-        return CheckAround.GetIsoDoorInformations(object)
-    elseif instanceof(object,"IsoThumpable") then
-        return CheckAround.GetIsoThumpableInformations(object)
-    end
-
-    -- IF ISOBOJECT, YOU CAN CHECK FOR DOOR FRAME THIS WAY
-    -- BUT IT NEEDS A WAY TO GET THE OPPOSITE SQUARE TO THE PLAYER
-    -- local prop = object:getSprite():getProperties()
-    -- if prop:Is(IsoFlagType.DoorWallW) or prop:Is(IsoFlagType.DoorWallN) then
-    --     print("door frame")
-
-    --     return nil, true, nil, true, nil
-    -- end
-
-    return nil, nil, nil, nil,nil
-end
 
 -- Check if there is a window
 CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldObjects, test)
@@ -389,17 +265,32 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
 
     -- iterate through every objects
     for object,_ in pairs(objects) do
-        -- check if window and get other states of object
-        local isWindow,isOpen,hasCurtainClosed,isDoor,isBarricaded = CheckAround.IsWindowOrDoor(object)
-
         -- object is window
-        if isWindow then
+        if WorldTools.IsWindow(object) then
+            local isBarricaded
+            -- check for barricades
+            local barricade1 = object:getBarricadeOnSameSquare()
+            local barricade2 = object:getBarricadeOnOppositeSquare()
+            if barricade1 and barricade1:isBlockVision() or barricade2 and barricade2:isBlockVision() then
+                isBarricaded = true
+            end
+
+            -- check for curtains
+            local curtains = object:HasCurtains() ---@as IsoCurtain
+            local isOpen = not curtains or curtains:IsOpen()
+
             -- add new option to check behind window
             local option = context:addOption(getText("ContextMenu_CheckThroughWindow"), player, CheckAround.CheckWindowOrDoor, object)
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
             -- window needs to be open to peek through
-            if not isOpen then
+            if isBarricaded then
+                option.notAvailable = true
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_CantCheckThroughWindow_barricaded")
+                option.toolTip = tooltip
+
+            elseif not isOpen then
                 option.notAvailable = true
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_CantCheckThroughWindow_notOpen")
@@ -410,24 +301,28 @@ CheckAround.OnFillWorldObjectContextMenu = function(playerIndex, context, worldO
             break
 
         -- object is door
-        elseif isDoor then
+        elseif WorldTools.IsDoor(object) then
+            local isBarricaded = object:isBarricaded()
+            local isOpen = object:IsOpen()
+
             -- add new option to check behind door or peek it if not open
             local option = context:addOption(getText("ContextMenu_CheckBehindDoor"), player, CheckAround.CheckWindowOrDoor, object)
             option.iconTexture = Texture.trygetTexture("CheckAround_contextMenu")
 
+            -- barricaded means we can't peek it
+            if isBarricaded then
+                option.notAvailable = true
+                local tooltip = ISWorldObjectContextMenu.addToolTip()
+                tooltip.description = getText("Tooltip_CantCheckThroughDoor_barricaded")
+                option.toolTip = tooltip
+
             -- verify open
-            if not isOpen then
+            elseif not isOpen then
                 option.name = getText("ContextMenu_PeekDoor")
                 local tooltip = ISWorldObjectContextMenu.addToolTip()
                 tooltip.description = getText("Tooltip_PeekBehindDoor")
                 option.toolTip = tooltip
 
-            -- barricaded means we can't peek it
-            elseif isBarricaded then
-                option.notAvailable = true
-                local tooltip = ISWorldObjectContextMenu.addToolTip()
-                tooltip.description = getText("Tooltip_CantCheckThroughDoor_barricaded")
-                option.toolTip = tooltip
             end
 
             -- door found, no point in checking other objects

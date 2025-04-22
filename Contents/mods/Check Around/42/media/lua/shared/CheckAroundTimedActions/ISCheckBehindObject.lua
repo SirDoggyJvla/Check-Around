@@ -15,6 +15,7 @@ Custom TimedAction to check behind doors.
 require "TimedActions/ISBaseTimedAction"
 local RayBeam2D = require "DoggyObjects/RayBeam2D"
 local CheckAround = require "CheckAround_module"
+local VisualMarkers = require "DoggyDebugTools/VisualMarkers"
 local GENERAL_RANDOM = newrandom()
 
 ISCheckBehindObject = ISBaseTimedAction:derive("ISCheckBehindObject")
@@ -36,12 +37,9 @@ function ISCheckBehindObject:update()
     delta = delta / 100
     if delta == self.previousDelta then return end
 
-    local beamVector = Vector2.new(self.startBeam)
-    -- beamVector:setDirection(self.a*delta)
-
-
-    beamVector:rotate(delta * self.rotateDirection)
-
+    -- update beam direction
+    local beamVector = self.beamVector
+    beamVector:setDirection(self.a*delta + self.b)
     local beamObject = self.beamObject
     beamObject:setBeam(beamVector)
 
@@ -61,7 +59,8 @@ function ISCheckBehindObject:update()
     until true end
 end
 
-function ISCheckBehindObject:setVoicelines(object)
+function ISCheckBehindObject:setVoicelines()
+    local object = self.object
     if instanceof(object, "IsoDoor") or instanceof(object, "IsoThumpable") and object:isDoor() then
         if not object:IsOpen() then
             self:rollCreek()
@@ -74,38 +73,25 @@ function ISCheckBehindObject:setVoicelines(object)
     end
 end
 
-function ISCheckBehindObject:setStartingBeam(object)
+function ISCheckBehindObject:setStartingBeam()
+    local object = self.object
     local fovAngle = self.fovAngle
-    local gamma = fovAngle / 2
-    local beta = math.pi/2 - gamma
+    local beta = math.pi/2 - fovAngle / 2 -- offset to main axis
 
-    print(fovAngle)
-    local door_north = object:getNorth()
-    if door_north then
-        self.startBeam = Vector2.new(1,0)
-        self.rotateDirection = -math.pi
-        print("door_north")
-        print(self.startBeam:getDirection())
-    else
-        self.startBeam = Vector2.new(0,1)
-        self.rotateDirection = math.pi
-        print("door_south")
-        print(self.startBeam:getDirection())
+    local initialAngle = 0
+    if not object:getNorth() then
+        self.rotateDirection = -self.rotateDirection
+        initialAngle = math.pi/2
     end
 
-    local dir = self.startBeam:getDirection()
-    print(dir)
+    -- setup initial beam
+    local beamVector = Vector2.new()
+    beamVector:setLengthAndDirection(initialAngle + beta * self.rotateDirection, 20)
+    self.beamVector = beamVector
 
-    -- self.startBeam:setDirection(dir + beta)
-
-    -- self.startBeam:rotate(beta*self.rotateDirection)
-
-    self.startBeam:setLength(20)
-
-    self.a = self.startBeam:getDirection() + fovAngle * self.rotateDirection
-    print(self.a)
-
-    -- self.endAngle = self.startBeam:getDirection() + fovAngle
+    -- coefficients for the beam rotation (dir = rot * delta + offset)
+    self.a = fovAngle * self.rotateDirection -- total rotation to achieve
+    self.b = beamVector:getDirection() -- initial offset
 end
 
 function ISCheckBehindObject:setSquares()
@@ -133,29 +119,25 @@ function ISCheckBehindObject:start()
 	self:setActionAnim("Welding")
     self:setOverrideHandModelsString(nil,nil)
 
-    -- instance info
-    local character = self.character
-    local object = self.object
-
     -- retrieve voicelines
-    self:setVoicelines(object)
+    self:setVoicelines()
 
     -- inverse squares to find out which one is truly behind the object relative to the character
     self:setSquares()
-    local square_opposite = self.square_opposite
 
     -- get start beam and rotation direction
-    self:setStartingBeam(object)
+    self:setStartingBeam()
 
     -- center point of beam rotation
-    local playerVector = character:getForwardDirection()
+    local playerVector = self.character:getForwardDirection()
+    local square_opposite = self.square_opposite
     local pointOfCheck = {
         x = square_opposite:getX() + 0.5 - playerVector:getX() * 0.4,
         y = square_opposite:getY() + 0.5 - playerVector:getY() * 0.4,
         z = square_opposite:getZ(),
     }
 
-    self.beamObject = RayBeam2D:new(pointOfCheck, Vector2.new(self.startBeam), self.ignoredObjects)
+    self.beamObject = RayBeam2D:new(pointOfCheck, self.beamVector, self.ignoredObjects)
 end
 
 function ISCheckBehindObject:rollCreek()
@@ -214,6 +196,7 @@ function ISCheckBehindObject:perform()
 end
 
 function ISCheckBehindObject:new(character, object, _fovAngle)
+    -- VisualMarkers.ResetMarkers()
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -225,11 +208,11 @@ function ISCheckBehindObject:new(character, object, _fovAngle)
 	-- custom fields
     o.object = object
     o.zombies = {}
-    local _fovAngle = _fovAngle or 120
+    local _fovAngle = _fovAngle or 180
     o.fovAngle = math.rad(_fovAngle)
 
     o.previousDelta = -1
-    o.rotateDirection = 1
+    o.rotateDirection = -1
     o.checkedSquares = {}
     o.showNametags = SandboxVars.CheckAround.ShowZombieNametag
     o.ignoredObjects = {

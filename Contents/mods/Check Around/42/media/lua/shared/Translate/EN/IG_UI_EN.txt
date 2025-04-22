@@ -1,6 +1,8 @@
 IGUI_EN = {
 	/* Mod Options */
 	IGUI_CheckAround													= "Check Around",
+	IGUI_CheckStairs = "Check stairs",
+	IGUI_CheckDoorWindow = "Check door/window",
 
 	/* Main joypad button for checking upstairs or downstairs */
 	IGUI_CheckAround_mainJoypad 										= "Main joypad control",
