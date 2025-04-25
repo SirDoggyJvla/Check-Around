@@ -20,6 +20,88 @@ local GENERAL_RANDOM = newrandom()
 
 ISCheckBehindObject = ISBaseTimedAction:derive("ISCheckBehindObject")
 
+
+ISCheckBehindObject.propertyToSegments = {
+	["WallN"] = {
+		{1,0,y_offset = 0},
+	},
+	["WallW"] = {
+		{0,-1,y_offset = 1},
+	},
+	["WallNW"] = {
+		{1,0,y_offset = 0},
+		{0,-1,y_offset = 1},
+	},
+    ["WindowN"] = {
+		{1,0,y_offset = 0},
+	},
+	["WindowW"] = {
+		{0,-1,y_offset = 1},
+	},
+    ["DoorN"] = {
+		{1,0,y_offset = 0},
+	},
+	["DoorW"] = {
+		{0,-1,y_offset = 1},
+	},
+
+
+    --- STAIRS ---
+    ["stairsBN"] = {
+        {1,0, y_offset = -2},
+        {0,-0.5, y_offset = -0.5},
+        {0,-1, y_offset = -1},
+        {0,-0.5, x_offset = 1, y_offset = -0.5},
+        {0,-1, x_offset = 1, y_offset = -1},
+    },
+    ["stairsMN"] = {
+        {1,0, y_offset = -1},
+        {0,-0.5, y_offset = 0.5},
+        {0,-1, y_offset = 0},
+        {0,-0.5, x_offset = 1, y_offset = 0.5},
+        {0,-1, x_offset = 1, y_offset = 0},
+    },
+    ["stairsTN"] = {
+        {1,0, y_offset = 0},
+        {0,-0.5, y_offset = 1.5},
+        {0,-1, y_offset = 1},
+        {0,-0.5, x_offset = 1, y_offset = 1.5},
+        {0,-1, x_offset = 1, y_offset = 1},
+    },
+
+    ["stairsBW"] = {
+        {0,1, x_offset = -2},
+        {1,0, x_offset = -2},
+        {1,0, x_offset = -2, y_offset = 1},
+        {0.5,0, x_offset = -1},
+        {0.5,0, x_offset = -1, y_offset = 1},
+    },
+    ["stairsMW"] = {
+        {0,1, x_offset = -1},
+        {1,0, x_offset = -1},
+        {1,0, x_offset = -1, y_offset = 1},
+        {0.5,0, x_offset = 0},
+        {0.5,0, x_offset = 0, y_offset = 1},
+    },
+    ["stairsTW"] = {
+        {0,1, x_offset = 0},
+        {1,0, x_offset = 0},
+        {1,0, x_offset = 0, y_offset = 1},
+        {0.5,0, x_offset = 1},
+        {0.5,0, x_offset = 1, y_offset = 1},
+    },
+}
+
+
+-- ["stairsBN"] = "stairsBN",
+-- ["stairsBW"] = "stairsBW",
+-- ["stairsMN"] = "stairsMN",
+-- ["stairsMW"] = "stairsMW",
+-- ["stairsTN"] = "stairsTN",
+-- ["stairsTW"] = "stairsTW",
+
+
+
 function ISCheckBehindObject:isValid()
 	return true
 end
@@ -43,6 +125,7 @@ function ISCheckBehindObject:update()
     local beamObject = self.beamObject
     beamObject:setBeam(beamVector)
 
+    -- cast ray
     local squares  = beamObject:castRay()
 
     for square, _ in pairs(squares) do repeat
@@ -137,7 +220,9 @@ function ISCheckBehindObject:start()
         z = square_opposite:getZ(),
     }
 
-    self.beamObject = RayBeam2D:new(pointOfCheck, self.beamVector, self.ignoredObjects)
+    local beamObject = RayBeam2D:new(pointOfCheck, self.beamVector, self.ignoredObjects)
+    beamObject.propertyToSegments = ISCheckBehindObject.propertyToSegments
+    self.beamObject = beamObject
 end
 
 function ISCheckBehindObject:rollCreek()
@@ -196,7 +281,9 @@ function ISCheckBehindObject:perform()
 end
 
 function ISCheckBehindObject:new(character, object, _fovAngle)
-    -- VisualMarkers.ResetMarkers()
+    VisualMarkers.ResetMarkers()
+    VisualMarkers.ResetHighlightSquares()
+    VisualMarkers.ResetLines()
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
