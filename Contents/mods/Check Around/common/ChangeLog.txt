@@ -12,3 +12,11 @@ link3 = Github = https://steamcommunity.com/linkfilter/?u=https://github.com/Sir
 - Takes into account the last changes to my API
 - You can't check behind doorframes anymore (not really needed)
 [ ------ ]
+
+[ 04/25/25 ]
+- Stairs now block vision when checking behind stairs and windows.
+[ ------ ]
+
+[ 04/26/25 ]
+- Fixed issue with keybind for checking stairs not saving.
+[ ------ ]

@@ -17,7 +17,7 @@ options:addDescription("Check Around your surrondings for threats (windows, door
 options:addSeparator()
 local OPTION_CHECKUPSTAIRS = options:addKeyBind("Check_Around", getText("IGUI_CheckStairs"), Keyboard.KEY_NONE)
 
-local OPTION_CHECKDOORWINDOW = options:addKeyBind("Check_Around", getText("IGUI_CheckDoorWindow"), Keyboard.KEY_NONE)
+local OPTION_CHECKDOORWINDOW = options:addKeyBind("Check_DoorWindow", getText("IGUI_CheckDoorWindow"), Keyboard.KEY_NONE)
 
 
 return {

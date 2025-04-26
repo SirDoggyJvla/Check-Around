@@ -1,13 +1,6 @@
 version=1
 id=3300688173
 title=[B41/B42] Check Around
-description=[quote=SirDoggyJvla]
-description=[h1]MAJOR UPDATE[/h1]
-description=[h3]THE MOD NOW REQUIRES THE USE OF MY LIBRARY MOD [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3428272880]Doggy's API[/url][/h3]
-description=
-description=[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/3300688173]Read the patch note for more detail.[/url]
-description=[/quote]
-description=
 description=Ever felt like peaking through a window or door or looking upstairs or downstairs was a natural human trait ?
 description=
 description=Now you can do it in Project Zomboid ! Saving you from those nasty floors hiding zombies upstairs, or even downstairs ! You can also check behind windows or door ! But peaking a closed door can have risks and cause a creeking sound that can attract zombies in the next room ! Or even players...
