@@ -16,79 +16,119 @@ require "TimedActions/ISBaseTimedAction"
 local RayBeam2D = require "DoggyObjects/RayBeam2D"
 local CheckAround = require "CheckAround_module"
 local VisualMarkers = require "DoggyDebugTools/VisualMarkers"
+local WorldTools = require "DoggyTools/WorldTools"
 local GENERAL_RANDOM = newrandom()
 
+---@class ISCheckBehindObject : ISBaseTimedAction
+---@field character IsoPlayer
+---@field object IsoObject
+---@field fovAngle number
+---@field zombies table<IsoZombie, boolean>
+---@field previousDelta number
+---@field rotateDirection number
+---@field checkedSquares table
+---@field showNametags boolean
+---@field ignoredObjects table
 ISCheckBehindObject = ISBaseTimedAction:derive("ISCheckBehindObject")
 
+ISCheckBehindObject.raysCollisions = {
+    propertyToSegments = {
+        ["WallN"] = {
+            {1,0,y_offset = 0},
+        },
+        ["WallW"] = {
+            {0,-1,y_offset = 1},
+        },
+        ["WallNW"] = {
+            {1,0,y_offset = 0},
+            {0,-1,y_offset = 1},
+        },
+        ["WindowN"] = {
+            {1,0,y_offset = 0},
+        },
+        ["WindowW"] = {
+            {0,-1,y_offset = 1},
+        },
+        ["DoorN"] = {
+            {1,0,y_offset = 0},
+        },
+        ["DoorW"] = {
+            {0,-1,y_offset = 1},
+        },
 
-ISCheckBehindObject.propertyToSegments = {
-	["WallN"] = {
-		{1,0,y_offset = 0},
-	},
-	["WallW"] = {
-		{0,-1,y_offset = 1},
-	},
-	["WallNW"] = {
-		{1,0,y_offset = 0},
-		{0,-1,y_offset = 1},
-	},
-    ["WindowN"] = {
-		{1,0,y_offset = 0},
-	},
-	["WindowW"] = {
-		{0,-1,y_offset = 1},
-	},
-    ["DoorN"] = {
-		{1,0,y_offset = 0},
-	},
-	["DoorW"] = {
-		{0,-1,y_offset = 1},
-	},
 
+        --- STAIRS ---
+        ["stairsBN"] = {
+            {1,0, y_offset = -2},
+            {0,-0.5, y_offset = -0.5},
+            {0,-1, y_offset = -1},
+            {0,-0.5, x_offset = 1, y_offset = -0.5},
+            {0,-1, x_offset = 1, y_offset = -1},
+        },
+        ["stairsMN"] = {
+            {1,0, y_offset = -1},
+            {0,-0.5, y_offset = 0.5},
+            {0,-1, y_offset = 0},
+            {0,-0.5, x_offset = 1, y_offset = 0.5},
+            {0,-1, x_offset = 1, y_offset = 0},
+        },
+        ["stairsTN"] = {
+            {1,0, y_offset = 0},
+            {0,-0.5, y_offset = 1.5},
+            {0,-1, y_offset = 1},
+            {0,-0.5, x_offset = 1, y_offset = 1.5},
+            {0,-1, x_offset = 1, y_offset = 1},
+        },
 
-    --- STAIRS ---
-    ["stairsBN"] = {
-        {1,0, y_offset = -2},
-        {0,-0.5, y_offset = -0.5},
-        {0,-1, y_offset = -1},
-        {0,-0.5, x_offset = 1, y_offset = -0.5},
-        {0,-1, x_offset = 1, y_offset = -1},
+        ["stairsBW"] = {
+            {0,1, x_offset = -2},
+            {1,0, x_offset = -2},
+            {1,0, x_offset = -2, y_offset = 1},
+            {0.5,0, x_offset = -1},
+            {0.5,0, x_offset = -1, y_offset = 1},
+        },
+        ["stairsMW"] = {
+            {0,1, x_offset = -1},
+            {1,0, x_offset = -1},
+            {1,0, x_offset = -1, y_offset = 1},
+            {0.5,0, x_offset = 0},
+            {0.5,0, x_offset = 0, y_offset = 1},
+        },
+        ["stairsTW"] = {
+            {0,1, x_offset = 0},
+            {1,0, x_offset = 0},
+            {1,0, x_offset = 0, y_offset = 1},
+            {0.5,0, x_offset = 1},
+            {0.5,0, x_offset = 1, y_offset = 1},
+        },
     },
-    ["stairsMN"] = {
-        {1,0, y_offset = -1},
-        {0,-0.5, y_offset = 0.5},
-        {0,-1, y_offset = 0},
-        {0,-0.5, x_offset = 1, y_offset = 0.5},
-        {0,-1, x_offset = 1, y_offset = 0},
+    -- validProperties = {
+    --     "WallN", "WallW", "WallNW", -- walls
+    --     "WindowN", "WindowW", -- windows
+    --     "DoorSound", -- doors
+    --     "stairsBN", "stairsBW", "stairsMN", "stairsMW", "stairsTN", "stairsTW", -- stairs
+    -- },
+    objectValidChecks = {
+        ["Door"] = {
+            WorldTools.CanSeeThroughDoor,
+        },
+        ["Window"] = {
+            WorldTools.CanSeeThroughWindow,
+        },
     },
-    ["stairsTN"] = {
-        {1,0, y_offset = 0},
-        {0,-0.5, y_offset = 1.5},
-        {0,-1, y_offset = 1},
-        {0,-0.5, x_offset = 1, y_offset = 1.5},
-        {0,-1, x_offset = 1, y_offset = 1},
-    },
-
-    ["stairsBW"] = {
-        {0,1, x_offset = -2},
-        {1,0, x_offset = -2},
-        {1,0, x_offset = -2, y_offset = 1},
-        {0.5,0, x_offset = -1},
-        {0.5,0, x_offset = -1, y_offset = 1},
-    },
-    ["stairsMW"] = {
-        {0,1, x_offset = -1},
-        {1,0, x_offset = -1},
-        {1,0, x_offset = -1, y_offset = 1},
-        {0.5,0, x_offset = 0},
-        {0.5,0, x_offset = 0, y_offset = 1},
-    },
-    ["stairsTW"] = {
-        {0,1, x_offset = 0},
-        {1,0, x_offset = 0},
-        {1,0, x_offset = 0, y_offset = 1},
-        {0.5,0, x_offset = 1},
-        {0.5,0, x_offset = 1, y_offset = 1},
+    propertyToStructureType = {
+        ["WallN"] = "Wall",
+        ["WallW"] = "Wall",
+        ["WallNW"] = "Wall",
+        ["DoorSound"] = "Door",
+        ["WindowN"] = "Window",
+        ["WindowW"] = "Window",
+        ["stairsBN"] = "Stairs",
+        ["stairsBW"] = "Stairs",
+        ["stairsMN"] = "Stairs",
+        ["stairsMW"] = "Stairs",
+        ["stairsTN"] = "Stairs",
+        ["stairsTW"] = "Stairs",
     },
 }
 
@@ -126,7 +166,7 @@ function ISCheckBehindObject:update()
     beamObject:setBeam(beamVector)
 
     -- cast ray
-    local squares  = beamObject:castRay()
+    local squares = beamObject:castRaySquares()
 
     for square, _ in pairs(squares) do repeat
         local movingObjects = square:getMovingObjects()
@@ -145,12 +185,14 @@ end
 function ISCheckBehindObject:setVoicelines()
     local object = self.object
     if instanceof(object, "IsoDoor") or instanceof(object, "IsoThumpable") and object:isDoor() then
+        ---@cast object IsoDoor|IsoThumpable
         if not object:IsOpen() then
-            self:rollCreek()
+            self:rollCreek(object)
         end
         self.voiceLine_noZombies = CheckAround.Voicelines_BehindDoorNoZombies
         self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindDoor
     elseif instanceof(object, "IsoWindow") or instanceof(object, "IsoThumpable") and object:isWindow() then
+        ---@cast object IsoWindow|IsoThumpable
         self.voiceLine_noZombies = CheckAround.Voicelines_BehindWindowsNoZombies
         self.voiceLine_zombies = CheckAround.Voicelines_zombiesBehindWindow
     end
@@ -220,13 +262,13 @@ function ISCheckBehindObject:start()
         z = square_opposite:getZ(),
     }
 
-    local beamObject = RayBeam2D:new(pointOfCheck, self.beamVector, self.ignoredObjects)
-    beamObject.propertyToSegments = ISCheckBehindObject.propertyToSegments
+    local beamObject = RayBeam2D:new(pointOfCheck, self.beamVector, self.raysCollisions, self.ignoredObjects)
     self.beamObject = beamObject
 end
 
-function ISCheckBehindObject:rollCreek()
-    local object = self.object
+---Play creek sound if the check fails.
+---@param object IsoDoor|IsoThumpable
+function ISCheckBehindObject:rollCreek(object)
     local character = self.character
 
     -- get character stats
@@ -280,6 +322,11 @@ function ISCheckBehindObject:perform()
 	ISBaseTimedAction.perform(self)
 end
 
+---comment
+---@param character IsoPlayer
+---@param object IsoObject
+---@param _fovAngle? number
+---@return table
 function ISCheckBehindObject:new(character, object, _fovAngle)
     VisualMarkers.ResetMarkers()
     VisualMarkers.ResetHighlightSquares()
@@ -294,9 +341,9 @@ function ISCheckBehindObject:new(character, object, _fovAngle)
 
 	-- custom fields
     o.object = object
-    o.zombies = {}
     local _fovAngle = _fovAngle or 180
     o.fovAngle = math.rad(_fovAngle)
+    o.zombies = {}
 
     o.previousDelta = -1
     o.rotateDirection = -1

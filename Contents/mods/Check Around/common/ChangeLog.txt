@@ -4,6 +4,10 @@ link2 = Workshop = https://steamcommunity.com/id/jvladeya/myworkshopfiles/?appid
 link3 = Github = https://steamcommunity.com/linkfilter/?u=https://github.com/SirDoggyJvla,
 [ ------ ]
 
+[ 06/28/25 ]
+- Fixed the required mod ID to adapt to the rename of Doggy's API (DoggyAPI) to Doggy's Library (DoggyLibrary)
+[ ------ ]
+
 [ 04/22/25 ]
 - New keybinds added.
 - Translation entries for checking stairs, windows and doors.
