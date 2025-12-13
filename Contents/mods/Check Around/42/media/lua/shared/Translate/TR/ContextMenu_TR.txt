@@ -1,0 +1,5 @@
+ContextMenu_TR = {
+    ContextMenu_CheckThroughWindow = "Pencereyi kontrol et",
+    ContextMenu_PeekDoor = "Kapının arkasına göz at",
+    ContextMenu_CheckBehindDoor = "Kapının arkasını kontrol et",
+}

@@ -1,0 +1,17 @@
+Sandbox_TR = {
+	/* Page names */
+	Sandbox_CheckUpstairs = "Check Upstairs",
+
+	/* CheckUpstairs */
+	Sandbox_CheckUpstairs_Radius = "Merdivenlerin tepesinden yarýçap",
+	Sandbox_CheckUpstairs_Radius_tooltip = "Oyuncunun zombiyi fark etmesi için, zombinin merdiven tepesindeki karenin ne kadar yakýnýnda olmasý gerektiðini tanýmlar.",
+
+	Sandbox_CheckUpstairs_ShowZombieNametag = "Zombi pozisyonunu göster",
+	Sandbox_CheckUpstairs_ShowZombieNametag_tooltip = "Zombinin üzerinde ismini göstererek pozisyonunu gösterir.",
+
+	Sandbox_CheckUpstairs_loreNameSingular = "Zombi ismi (Tekil)",
+	Sandbox_CheckUpstairs_loreNameSingular_tooltip = "Seslendirmelerde veya zombi isim etiketlerinde kullanýlan tekil zombi ismidir. Varsayýlan = 'zombi', varsayýlaný korumak için boþ býrakýn.",
+
+	Sandbox_CheckUpstairs_loreNamePlurial = "Zombi ismi (Çoðul)",
+	Sandbox_CheckUpstairs_loreNamePlurial_tooltip = "Seslendirmelerde veya zombi isim etiketlerinde kullanýlan çoðul zombi ismidir. Varsayýlan = 'zombi', varsayýlaný korumak için boþ býrakýn.",
+}

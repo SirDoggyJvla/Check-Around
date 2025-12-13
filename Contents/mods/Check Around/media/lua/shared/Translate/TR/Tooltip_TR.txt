@@ -1,0 +1,10 @@
+Tooltip_TR = {
+    Tooltip_CantCheckThroughWindow_tooFar = "Pencere çok uzak olduðu için kontrol edilemiyor.",
+    Tooltip_CantCheckThroughWindow_curtain = "Perdeler yüzünden pencere kontrol edilemiyor.",
+    Tooltip_CantCheckThroughWindow_notOpen = "Pencere açýk olmadýðý için kontrol edilemiyor.",
+
+    Tooltip_CantCheckThroughDoor_tooFar = "Kapý çok uzak olduðu için kontrol edilemiyor.",
+    Tooltip_CantCheckThroughDoor_barricaded = "Kapý barikatli olduðu için kontrol edilemiyor.",
+
+    Tooltip_PeekBehindDoor = "Kapýnýn arkasýna göz atmak gizlilik yeteneðine ve moodle'larýna baðlý olarak ses yapabilir. Eðilmek yardýmcý olabilir.",
+}
