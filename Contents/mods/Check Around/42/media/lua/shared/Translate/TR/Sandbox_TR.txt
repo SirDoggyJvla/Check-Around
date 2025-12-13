@@ -1,0 +1,17 @@
+Sandbox_TR = {
+	/* Page names */
+	Sandbox_CheckAround = "Check Around",
+
+	/* CheckAround */
+	Sandbox_CheckAround_Radius = "Merdivenlerin tepesinden yarıçap",
+	Sandbox_CheckAround_Radius_tooltip = "Oyuncunun zombiyi fark etmesi için, zombinin merdiven tepesindeki karenin ne kadar yakınında olması gerektiğini tanımlar.",
+
+	Sandbox_CheckAround_ShowZombieNametag = "Zombi pozisyonunu göster",
+	Sandbox_CheckAround_ShowZombieNametag_tooltip = "Zombinin üzerinde ismini göstererek pozisyonunu gösterir.",
+
+	Sandbox_CheckAround_loreNameSingular = "Zombi ismi (Tekil)",
+	Sandbox_CheckAround_loreNameSingular_tooltip = "Seslendirmelerde veya zombi isim etiketlerinde kullanılan tekil zombi ismidir. Varsayılan = 'zombi', varsayılanı korumak için boş bırakın.",
+
+	Sandbox_CheckAround_loreNamePlurial = "Zombi ismi (Çoğul)",
+	Sandbox_CheckAround_loreNamePlurial_tooltip = "Seslendirmelerde veya zombi isim etiketlerinde kullanılan çoğul zombi ismidir. Varsayılan = 'zombi', varsayılanı korumak için boş bırakın.",
+}

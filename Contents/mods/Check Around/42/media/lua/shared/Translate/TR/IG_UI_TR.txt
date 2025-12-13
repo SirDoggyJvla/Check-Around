@@ -1,0 +1,166 @@
+IGUI_TR = {
+	/* Mod Options */
+	IGUI_CheckAround													= "Check Around",
+	IGUI_CheckStairs = "Merdivenleri kontrol et",
+	IGUI_CheckDoorWindow = "Kapıyı/pencereyi kontrol et",
+
+	/* Main joypad button for checking upstairs or downstairs */
+	IGUI_CheckAround_mainJoypad 										= "Birincil oyun kumandası kontrolü",
+	IGUI_CheckAround_mainJoypad_tooltip								= "Oyun kumandası kullananlar için merdivenleri kontrol etmeyi saglayan birincil buton.",
+	IGUI_CheckAround_AButton 											= "AButton",
+	IGUI_CheckAround_BButton 											= "BButton",
+	IGUI_CheckAround_XButton 											= "XButton",
+	IGUI_CheckAround_YButton 											= "YButton",
+	IGUI_CheckAround_LBumper 											= "LBumper",
+	IGUI_CheckAround_RBumper 											= "RBumper",
+	IGUI_CheckAround_Back 											= "Back",
+	IGUI_CheckAround_Start 											= "Start",
+	IGUI_CheckAround_LStickButton 									= "LStickButton",
+	IGUI_CheckAround_RStickButton 									= "RStickButton",
+	IGUI_CheckAround_Other 											= "Other",
+	IGUI_CheckAround_DPadLeft 										= "DPadLeft",
+	IGUI_CheckAround_DPadRight 										= "DPadRight",
+	IGUI_CheckAround_DPadUp 											= "DPadUp",
+	IGUI_CheckAround_DPadDown 										= "DPadDown",
+
+	/* Secondary joypad button for checking upstairs or downstairs */
+	IGUI_CheckAround_secondaryJoypad 									= "Ikincil oyun kumandası kontrolü",
+	IGUI_CheckAround_secondaryJoypad_tooltip							= "Oyun kumandası kullananlar için, merdivenleri kontrol ederken birincil butonla birlikte basılması gereken ikincil buton.",
+	IGUI_CheckAround_None												= "None",
+	IGUI_CheckAround_RT												= "RT",
+	IGUI_CheckAround_LT												= "LT",
+	IGUI_CheckAround_RB												= "RB",
+	IGUI_CheckAround_LB												= "LB",
+
+	/* Zombie Name */
+	IGUI_CheckAround_zombieName										= "zombi",
+	IGUI_CheckAround_zombiesName										= "zombi",
+
+	/* No zombies behind window */
+	IGUI_CheckAround_BehindWindowsNoZombies1							= "Pencerenin arkasında hiç %s göremiyorum.",
+	IGUI_CheckAround_BehindWindowsNoZombies2							= "Pencerenin arkasında hiçbir sey yok.",
+	IGUI_CheckAround_BehindWindowsNoZombies3 							= "Pencerenin arkası temiz.",
+	IGUI_CheckAround_BehindWindowsNoZombies4 							= "Pencere tertemiz.",
+	IGUI_CheckAround_BehindWindowsNoZombies5 							= "Pencerenin arkasında tehlike yok.",
+	IGUI_CheckAround_BehindWindowsNoZombies6 							= "Pencerenin arkası bombos.",
+	IGUI_CheckAround_BehindWindowsNoZombies7 							= "Pencerenin arkasında süpheli bir sey yok.",
+	IGUI_CheckAround_BehindWindowsNoZombies8 							= "Pencerenin arkasında her sey temiz.",
+	IGUI_CheckAround_BehindWindowsNoZombies9 							= "Pencerenin arkasında hareket yok.",
+	IGUI_CheckAround_BehindWindowsNoZombies10							= "Sadece güzel bir manzara görüyorum.",
+	IGUI_CheckAround_BehindWindowsNoZombies11							= "Pencerenin arkasında tehlike görmüyorum.",
+	IGUI_CheckAround_BehindWindowsNoZombies12							= "Pencerenin arkası güvenli gözüküyor."
+
+	/* Zombies behind window */
+	IGUI_CheckAround_zombiesBehindWindow1								= "Pencerenin arkasında %d %s görüyorum.",
+	IGUI_CheckAround_zombiesBehindWindow2								= "Pencerenin arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindWindow3 							= "%d %s pencerenin arkasında.",
+	IGUI_CheckAround_zombiesBehindWindow4 							= "Pencerenin arkasında %d %s fark ettim.",
+	IGUI_CheckAround_zombiesBehindWindow5 							= "%d %s pencerenin arkasında geziniyor.",
+	IGUI_CheckAround_zombiesBehindWindow6 							= "Pencerenin arkasında %d %s bekliyor.",
+	IGUI_CheckAround_zombiesBehindWindow7 							= "Dikkat, pencerenin arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindWindow8 							= "Görünüse göre pencerenin arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindWindow9 							= "%d %s pencerenin arkasında saklanıyor.",
+	IGUI_CheckAround_zombiesBehindWindow10							= "Pencerenin arkasında hareket eden %d %s görüyorum.",
+	IGUI_CheckAround_zombiesBehindWindow11							= "Pencerenin arkasında beni yemek isteyen %d %s var.",
+	IGUI_CheckAround_zombiesBehindWindow12							= "Pencerenin arkasında %d %s bana bakıyor."
+
+
+	/* No zombies behind door */
+	IGUI_CheckAround_BehindDoorNoZombies1								= "Kapının arkasında hiç %s göremiyorum.",
+	IGUI_CheckAround_BehindDoorNoZombies2								= "Kapının arkasında bir sey yok.",
+	IGUI_CheckAround_BehindDoorNoZombies3								= "Kapının arkası bombos.",
+	IGUI_CheckAround_BehindDoorNoZombies4								= "Kapı temiz.",
+	IGUI_CheckAround_BehindDoorNoZombies5								= "Kapının arkasında tehlike yok.",
+	IGUI_CheckAround_BehindDoorNoZombies6								= "Kapının arkası tertemiz.",
+	IGUI_CheckAround_BehindDoorNoZombies7								= "Kapının arkasında süpheli bir sey yok.",
+	IGUI_CheckAround_BehindDoorNoZombies8								= "Kapının arkasında her sey temiz.",
+	IGUI_CheckAround_BehindDoorNoZombies9								= "Kapının arkasında hareket yok.",
+	IGUI_CheckAround_BehindDoorNoZombies10							= "Kapının arkasında ses yok.",
+	IGUI_CheckAround_BehindDoorNoZombies11							= "Kapının arkasında tehlike görmüyorum.",
+	IGUI_CheckAround_BehindDoorNoZombies12							= "Kapının arkası güvenli gözüküyor."
+
+	/* Zombies behind door */
+	IGUI_CheckAround_zombiesBehindDoor1								= "Kapının arkasında %d %s görüyorum.",
+	IGUI_CheckAround_zombiesBehindDoor2								= "Kapının arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindDoor3								= "%d %s kapının arkasında.",
+	IGUI_CheckAround_zombiesBehindDoor4								= "Kapının arkasında %d %s fark ettim.",
+	IGUI_CheckAround_zombiesBehindDoor5								= "%d %s kapının arkasında geziniyor.",
+	IGUI_CheckAround_zombiesBehindDoor6								= "Kapının arkasında %d %s bekliyor.",
+	IGUI_CheckAround_zombiesBehindDoor7								= "Dikkat, kapının arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindDoor8								= "Görünüse göre kapının arkasında %d %s var.",
+	IGUI_CheckAround_zombiesBehindDoor9								= "%d %s kapının arkasında saklanıyor.",
+	IGUI_CheckAround_zombiesBehindDoor10								= "Kapının arkasında hareket eden %d %s görüyorum.",
+	IGUI_CheckAround_zombiesBehindDoor11								= "Kapının arkasında %d %s beni yemek istiyor.",
+	IGUI_CheckAround_zombiesBehindDoor12								= "Kapının arkasında %d %s bana bakıyor."
+
+
+	/* No zombies upstairs */
+	IGUI_CheckAround_CheckAroundNoZombies1							= "Yukarıda hiç %s görmüyorum.",
+	IGUI_CheckAround_CheckAroundNoZombies2							= "Yukarıda hiçbir sey görünmüyor.",
+	IGUI_CheckAround_CheckAroundNoZombies3							= "Yukarı çıkmak güvenli olmalı.",
+	IGUI_CheckAround_CheckAroundNoZombies4							= "Yukarıda süpheli bir sey yok.",
+	IGUI_CheckAround_CheckAroundNoZombies5							= "Yukarısı bombos.",
+	IGUI_CheckAround_CheckAroundNoZombies6							= "Yukarıda tehlike fark etmedim.",
+	IGUI_CheckAround_CheckAroundNoZombies7							= "Yukarısı sessiz.",
+	IGUI_CheckAround_CheckAroundNoZombies8							= "Yukarısı tertemiz.",
+	IGUI_CheckAround_CheckAroundNoZombies9							= "Yukarıda hareket yok.",
+	IGUI_CheckAround_CheckAroundNoZombies10							= "Yukarıda hiçbir tehlike görmüyorum.",
+	IGUI_CheckAround_CheckAroundNoZombies11							= "Yukarıda hiç %s görmedim.",
+	IGUI_CheckAround_CheckAroundNoZombies12							= "Yukarısı güvenli gibi.",
+
+	/* Zombies upstairs */
+	IGUI_CheckAround_zombiesUpstairs1									= "Yukarıda %d %s görebiliyorum.",
+	IGUI_CheckAround_zombiesUpstairs2									= "Yukarıda %d %s var.",
+	IGUI_CheckAround_zombiesUpstairs3									= "Yukarıda %d %s fark ettim.",
+	IGUI_CheckAround_zombiesUpstairs4									= "Yukarıda %d %s geziniyor.",
+	IGUI_CheckAround_zombiesUpstairs5									= "Görünüse göre yukarıda %d %s bekliyor.",
+	IGUI_CheckAround_zombiesUpstairs6									= "Yukarıda %d %s saydım.",
+	IGUI_CheckAround_zombiesUpstairs7									= "Yukarıda %d %s var, dikkat et!",
+	IGUI_CheckAround_zombiesUpstairs8									= "Yukarıda %d %s beni yemek için bekliyor.",
+	IGUI_CheckAround_zombiesUpstairs9									= "Ileride %d %s gördüm.",
+	IGUI_CheckAround_zombiesUpstairs10								= "Üst katta %d %s var.",
+	IGUI_CheckAround_zombiesUpstairs11								= "Gölgelerin içinde %d %s fark ettim.",
+	IGUI_CheckAround_zombiesUpstairs12								= "Dikkat, yukarıda %d %s var!",
+
+	/* No zombies downstairs */
+	IGUI_CheckAround_CheckDownstairsNoZombies1						= "Asagıda hiç %s görmüyorum.",
+	IGUI_CheckAround_CheckDownstairsNoZombies2						= "Asagıda hiçbir sey görünmüyor.",
+	IGUI_CheckAround_CheckDownstairsNoZombies3						= "Asagısı temiz görünüyor.",
+	IGUI_CheckAround_CheckDownstairsNoZombies4						= "Asagıda süpheli bir sey yok.",
+	IGUI_CheckAround_CheckDownstairsNoZombies5						= "Asagısı bombos.",
+	IGUI_CheckAround_CheckDownstairsNoZombies6						= "Asagıda hiçbir tehlike görmüyorum.",
+	IGUI_CheckAround_CheckDownstairsNoZombies7						= "Asagısı sessiz.",
+	IGUI_CheckAround_CheckDownstairsNoZombies8						= "Asagısı tertemiz.",
+	IGUI_CheckAround_CheckDownstairsNoZombies9						= "Asagıda hareket yok.",
+	IGUI_CheckAround_CheckDownstairsNoZombies10						= "Asagıda tehlike fark etmedim.",
+	IGUI_CheckAround_CheckDownstairsNoZombies11						= "Asagıda hiç %s görmedim.",
+	IGUI_CheckAround_CheckDownstairsNoZombies12						= "Asagısı güvenli gibi.",
+
+	/* Zombies downstairs */
+	IGUI_CheckAround_zombiesDownstairs1								= "Asagıda %d %s görebiliyorum.",
+	IGUI_CheckAround_zombiesDownstairs2								= "Asagıda %d %s var.",
+	IGUI_CheckAround_zombiesDownstairs3								= "Asagıda %d %s fark ettim.",
+	IGUI_CheckAround_zombiesDownstairs4								= "Asagıda %d %s geziniyor.",
+	IGUI_CheckAround_zombiesDownstairs5								= "Görünüse göre asagıda %d %s bekliyor.",
+	IGUI_CheckAround_zombiesDownstairs6								= "Asagıda %d %s saydım.",
+	IGUI_CheckAround_zombiesDownstairs7								= "Asagıda %d %s var, dikkat et!",
+	IGUI_CheckAround_zombiesDownstairs8								= "Asagıda %d %s beni yemek için bekliyor.",
+	IGUI_CheckAround_zombiesDownstairs9								= "Asagıda %d %s gördüm.",
+	IGUI_CheckAround_zombiesDownstairs10								= "Alt katta %d %s var.",
+	IGUI_CheckAround_zombiesDownstairs11								= "Gölgelerin içinde %d %s fark ettim.",
+	IGUI_CheckAround_zombiesDownstairs12								= "Dikkat, asagıda %d %s var!",
+
+	/* Spore zone behind window */
+	IGUI_CheckAround_sporeZone1								= "Bu binanın içerisinde spor bölgesi var.",
+	IGUI_CheckAround_sporeZone2								= "Girmeden önce maske takmalıyım.",
+	IGUI_CheckAround_sporeZone3								= "Bu binanın içerisinde spor bölgesi görüyorum.",
+	IGUI_CheckAround_sporeZone4								= "Binanın içerisinde spor bölgesi tespit ettim.",
+	IGUI_CheckAround_sporeZone5								= "Pencerenin arkasında spor bölgesi var.",
+	IGUI_CheckAround_sporeZone6								= "Binanın içerisinde spor bölgesi görünüyor.",
+	IGUI_CheckAround_sporeZone7								= "Binanın içerisinde sporların süzülüsünü görebiliyorum.",
+	IGUI_CheckAround_sporeZone8								= "Maskemi taksam iyi olur, içeride spor bölgesi var.",
+	IGUI_CheckAround_sporeZone9								= "Binada spor bölgesi var. Maske takmak lazım.",
+	IGUI_CheckAround_sporeZone10								= "Içeride spor bölgesi var gibi.",
+	IGUI_CheckAround_sporeZone11								= "Pencerenin arkasında sporları görüyorum.",
+	IGUI_CheckAround_sporeZone12								= "Dikkat, içeride spor bölgesi var.",
+}
